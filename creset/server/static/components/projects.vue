@@ -5,8 +5,7 @@
         div.columns
           div.column.is-10.is-offset-1
 
-            h1.title.is-1.has-text-white Hello, {{ username | title }}.
-            h2.subtitle.is-4.has-text-white I hope you are having a great day!
+            
             a.button.is-medium.is-primary(v-on:click="isActive = !isActive") Create Project
 
 

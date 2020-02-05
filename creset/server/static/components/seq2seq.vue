@@ -9,11 +9,15 @@ block annotation-area
 
   section.todoapp
     header.header
+     input.textarea.new-todo(
+        type="text"
+        placeholder="What is your quation?"
+      )
       input.textarea.new-todo(
         v-model="newTodo"
         v-on:keyup.enter="addTodo"
         type="text"
-        placeholder="What is your response?"
+        placeholder="What is your answer?"
       )
 
     section.main(v-cloak="")
