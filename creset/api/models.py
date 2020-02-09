@@ -7,15 +7,17 @@ from django.contrib.staticfiles.storage import staticfiles_storage
 from django.core.exceptions import ValidationError
 from polymorphic.models import PolymorphicModel
 
-from .managers import AnnotationManager, Seq2seqAnnotationManager
+from .managers import AnnotationManager, Seq2seqAnnotationManager,qaDatasetAnnotationManager
 
 DOCUMENT_CLASSIFICATION = 'DocumentClassification'
 SEQUENCE_LABELING = 'SequenceLabeling'
 SEQ2SEQ = 'Seq2seq'
+QA_DATASET = 'qaDataset'
 PROJECT_CHOICES = (
     (DOCUMENT_CLASSIFICATION, 'document classification'),
     (SEQUENCE_LABELING, 'sequence labeling'),
     (SEQ2SEQ, 'sequence to sequence'),
+    (QA_DATASET,'create qa dataset'),
 )
 
 
@@ -139,6 +141,32 @@ class Seq2seqProject(Project):
         from .utils import Seq2seqStorage
         return Seq2seqStorage(data, self)
 
+class qaDatasetProject(Project):
+
+    @property
+    def image(self):
+        return staticfiles_storage.url('assets/images/cats/seq2seq.jpg')
+
+    def get_bundle_name(self):
+        return 'qaDataset'
+
+    def get_bundle_name_upload(self):
+        return 'upload_qa_dataset'
+
+    def get_bundle_name_download(self):
+        return 'download_qa_dataset'
+
+    def get_annotation_serializer(self):
+        from .serializers import qaDatasetAnnotationSerializer
+        return qaDatasetAnnotationSerializer
+
+    def get_annotation_class(self):
+        return qaDatasetAnnotation
+
+    def get_storage(self, data):
+        from .utils import qaDatasetStorage
+        return qaDatasetStorage(data, self)
+
 
 class Label(models.Model):
     PREFIX_KEYS = (
@@ -237,3 +265,17 @@ class Seq2seqAnnotation(Annotation):
 
     class Meta:
         unique_together = ('document', 'user', 'text')
+
+class qaDatasetAnnotation(Annotation):
+    # Override AnnotationManager for custom functionality
+    objects = qaDatasetAnnotationManager()
+
+    document = models.ForeignKey(Document, related_name='qaDataset_annotations', on_delete=models.CASCADE)
+    question = models.CharField(max_length=500)
+    answer = models.CharField(max_length=500)
+    start_question = models.IntegerField()
+    end_question = models.IntegerField()
+    start_answer = models.IntegerField()
+    end_answer = models.IntegerField()
+    class Meta:
+        unique_together = ('document', 'user','id', 'question','answer','start_question','end_question','start_answer','end_answer')

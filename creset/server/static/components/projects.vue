@@ -42,6 +42,7 @@
                 option(value="DocumentClassification") document classification
                 option(value="SequenceLabeling") sequence labeling
                 option(value="Seq2seq") sequence to sequence
+                option(value="qaDataset") create qa dataset
             p.help.is-danger {{ projectTypeError }}
 
           div.field
@@ -197,6 +198,9 @@ export default {
       if (projectType === 'Seq2seq') {
         return this.selected === 'Seq2seq';
       }
+      if (projectType === 'qaDataset') {
+        return this.selected === 'qaDataset';
+      }
       return false;
     },
 
@@ -239,6 +243,9 @@ export default {
       }
       if (this.projectType === 'Seq2seq') {
         return 'Seq2seqProject';
+      }
+       if (this.projectType === 'qaDataset') {
+        return 'qaDatasetProject';
       }
       return '';
     },

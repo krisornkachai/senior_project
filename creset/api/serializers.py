@@ -5,8 +5,8 @@ from rest_framework.exceptions import ValidationError
 
 
 from .models import Label, Project, Document
-from .models import TextClassificationProject, SequenceLabelingProject, Seq2seqProject
-from .models import DocumentAnnotation, SequenceAnnotation, Seq2seqAnnotation
+from .models import TextClassificationProject, SequenceLabelingProject, Seq2seqProject,qaDatasetProject
+from .models import DocumentAnnotation, SequenceAnnotation, Seq2seqAnnotation,qaDatasetAnnotation
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -111,13 +111,22 @@ class Seq2seqProjectSerializer(serializers.ModelSerializer):
                   'randomize_document_order')
         read_only_fields = ('image', 'updated_at', 'users')
 
+class qaDatasetProjectSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = qaDatasetProject
+        fields = ('id', 'name', 'description', 'guideline', 'users', 'project_type', 'image', 'updated_at',
+                  'randomize_document_order')
+        read_only_fields = ('image', 'updated_at', 'users')
+
 
 class ProjectPolymorphicSerializer(PolymorphicSerializer):
     model_serializer_mapping = {
         Project: ProjectSerializer,
         TextClassificationProject: TextClassificationProjectSerializer,
         SequenceLabelingProject: SequenceLabelingProjectSerializer,
-        Seq2seqProject: Seq2seqProjectSerializer
+        Seq2seqProject: Seq2seqProjectSerializer,
+        qaDatasetProject:qaDatasetProjectSerializer
     }
 
 
@@ -160,4 +169,12 @@ class Seq2seqAnnotationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Seq2seqAnnotation
         fields = ('id', 'text', 'user', 'document', 'prob')
+        read_only_fields = ('user',)
+
+class qaDatasetAnnotationSerializer(serializers.ModelSerializer):
+    document = serializers.PrimaryKeyRelatedField(queryset=Document.objects.all())
+
+    class Meta:
+        model = qaDatasetAnnotation
+        fields = ('id', 'question','answer','start_question','end_question','start_answer','end_answer', 'user', 'document', 'prob')
         read_only_fields = ('user',)

@@ -214,6 +214,28 @@ class Seq2seqStorage(BaseStorage):
                 annotations.append({'document': doc.id, 'text': text})
         return annotations
 
+class qaDatasetStorage(BaseStorage):
+    """Store json for seq2seq.
+
+    The format is as follows:
+    {"text": "Hello, World!", "labels": ["こんにちは、世界!"]}
+    ...
+    """
+    @transaction.atomic
+    def save(self, user):
+        for data in self.data:
+            doc = self.save_doc(data)
+            labels = self.extract_label(data)
+            annotations = self.make_annotations(doc, labels)
+            self.save_annotation(annotations, user)
+
+    @classmethod
+    def make_annotations(cls, docs, labels):
+        annotations = []
+        for doc, texts in zip(docs, labels):
+            for text in texts:
+                annotations.append({'document': doc.id, 'text': text})
+        return annotations
 
 class FileParser(object):
 

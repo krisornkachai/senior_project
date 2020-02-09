@@ -1,8 +1,8 @@
 from django.contrib import admin
 
 from .models import Label, Document, Project
-from .models import DocumentAnnotation, SequenceAnnotation, Seq2seqAnnotation
-from .models import TextClassificationProject, SequenceLabelingProject, Seq2seqProject
+from .models import DocumentAnnotation, SequenceAnnotation, Seq2seqAnnotation,qaDatasetAnnotation
+from .models import TextClassificationProject, SequenceLabelingProject, Seq2seqProject,qaDatasetProject
 
 
 class LabelAdmin(admin.ModelAdmin):
@@ -40,6 +40,10 @@ class Seq2seqAnnotationAdmin(admin.ModelAdmin):
     ordering = ('document',)
     search_fields = ('document',)
 
+class qaDatasetAnnotationAdmin(admin.ModelAdmin):
+    list_display = ('document', 'user','id', 'question','answer','start_question','end_question','start_answer','end_answer')
+    ordering = ('document',)
+    search_fields = ('document',)
 
 admin.site.register(DocumentAnnotation, DocumentAnnotationAdmin)
 admin.site.register(SequenceAnnotation, SequenceAnnotationAdmin)
@@ -50,3 +54,5 @@ admin.site.register(Project, ProjectAdmin)
 admin.site.register(TextClassificationProject, ProjectAdmin)
 admin.site.register(SequenceLabelingProject, ProjectAdmin)
 admin.site.register(Seq2seqProject, ProjectAdmin)
+admin.site.register(qaDatasetProject, ProjectAdmin)
+admin.site.register(qaDatasetAnnotation, qaDatasetAnnotationAdmin)

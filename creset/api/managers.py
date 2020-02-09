@@ -31,3 +31,17 @@ class Seq2seqAnnotationManager(Manager):
             user_count[d['user__username']] += d['user__count']
 
         return label_count, user_count
+
+class qaDatasetAnnotationManager(Manager):
+
+    def get_label_per_data(self, project):
+        label_count = Counter()
+        user_count = Counter()
+        docs = project.documents.all()
+        annotations = self.filter(document_id__in=docs.all())
+
+        for d in annotations.values('question', 'user__username').annotate(Count('question'), Count('user')):
+            label_count[d['question']] += d['question__count']
+            user_count[d['user__username']] += d['user__count']
+
+        return label_count, user_count
