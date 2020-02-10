@@ -2,10 +2,36 @@
 extends ./annotation.pug
 
 block annotation-area
-  div.card.has-text-weight-bold.has-text-white.has-background-royalblue
+  div.card
+    header.card-header
+      div.card-header-title.has-background-royalblue
+        div.field.is-grouped.is-grouped-multiline
+          div.control(v-for="label in labels")
+            div.tags.has-addons
+              a.tag.is-medium(
+                v-shortkey.once="replaceNull(shortcutKey(label))"
+                v-bind:style="{ \
+                  color: label.text_color, \
+                  backgroundColor: label.background_color \
+                }"
+                v-on:click="annotate(label.id)"
+                v-on:shortkey="annotate(label.id)"
+              ) {{ label.text }}
+              span.tag.is-medium
+                kbd {{ shortcutKey(label) | simpleShortcut }}
+
     div.card-content
-      div.content(v-if="docs[pageNumber]")
-        span.text {{ docs[pageNumber].text }}
+      div.content.scrollable(v-if="docs[pageNumber] && annotations[pageNumber]", ref="textbox")
+        annotator(
+          v-bind:labels="labels"
+          v-bind:entity-positions="annotations[pageNumber]"
+          v-bind:search-query="searchQuery"
+          v-bind:text="docs[pageNumber].text"
+          v-on:remove-label="removeLabel"
+          v-on:add-label="addLabel"
+          ref="annotator"
+        )
+
 
   section.todoapp
     header.header
@@ -24,11 +50,11 @@ block annotation-area
           v-bind:class="{ editing: todo == editedTodo }"
         )
           div.view
-            label(v-on:dblclick="editTodo(todo)") {{ todo.text }}
+            label(v-on:dblclick="editTodo(todo)") {{ todo.question }}
             button.delete.destroy.is-large(v-on:click="removeTodo(todo)")
 
           input.textarea.edit(
-            v-model="todo.text"
+            v-model="todo.question"
             v-todo-focus="todo == editedTodo"
             v-on:blur="doneEdit(todo)"
             v-on:keyup.enter="doneEdit(todo)"
@@ -41,10 +67,13 @@ block annotation-area
 import annotationMixin from './annotationMixin';
 import todoFocus from './directives';
 import HTTP from './http';
+import Annotator from './annotator.vue';
+import { simpleShortcut } from './filter';
 
 export default {
+  filters: { simpleShortcut },
+  components: { Annotator },
   directives: { todoFocus },
-
   mixins: [annotationMixin],
 
   data: () => ({
@@ -63,8 +92,6 @@ export default {
       const payload = {
         question: value,
         answer: "aaaaaa",
-        start_question: 12,
-        end_question: 13,
         start_answer: 14,
         end_answer: 15
       };
@@ -84,7 +111,7 @@ export default {
     },
 
     editTodo(todo) {
-      this.beforeEditCache = todo.text;
+      this.beforeEditCache = todo.question;
       this.editedTodo = todo;
     },
 
@@ -93,8 +120,8 @@ export default {
         return;
       }
       this.editedTodo = null;
-      todo.text = todo.text.trim();
-      if (!todo.text) {
+      todo.question = todo.question.trim();
+      if (!todo.question) {
         this.removeTodo(todo);
       }
       const docId = this.docs[this.pageNumber].id;
@@ -105,7 +132,17 @@ export default {
 
     cancelEdit(todo) {
       this.editedTodo = null;
-      todo.text = this.beforeEditCache;
+      todo.question = this.beforeEditCache;
+    },
+    annotate(labelId) {
+      this.$refs.annotator.addLabel(labelId);
+    },
+
+    addLabel(annotation) {
+      const docId = this.docs[this.pageNumber].id;
+      HTTP.post(`docs/${docId}/annotations`, annotation).then((response) => {
+        this.annotations[this.pageNumber].push(response.data);
+      });
     },
 
     async submit() {

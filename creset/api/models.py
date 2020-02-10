@@ -273,9 +273,7 @@ class qaDatasetAnnotation(Annotation):
     document = models.ForeignKey(Document, related_name='qaDataset_annotations', on_delete=models.CASCADE)
     question = models.CharField(max_length=500)
     answer = models.CharField(max_length=500)
-    start_question = models.IntegerField()
-    end_question = models.IntegerField()
     start_answer = models.IntegerField()
     end_answer = models.IntegerField()
     class Meta:
-        unique_together = ('document', 'user','id', 'question','answer','start_question','end_question','start_answer','end_answer')
+        unique_together = ('document', 'user','id', 'question','answer','start_answer','end_answer')

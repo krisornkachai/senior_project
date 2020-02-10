@@ -176,5 +176,5 @@ class qaDatasetAnnotationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = qaDatasetAnnotation
-        fields = ('id', 'question','answer','start_question','end_question','start_answer','end_answer', 'user', 'document', 'prob')
+        fields = ('id', 'question','answer','start_answer','end_answer', 'user', 'document')
         read_only_fields = ('user',)

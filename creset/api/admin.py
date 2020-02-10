@@ -41,7 +41,7 @@ class Seq2seqAnnotationAdmin(admin.ModelAdmin):
     search_fields = ('document',)
 
 class qaDatasetAnnotationAdmin(admin.ModelAdmin):
-    list_display = ('document', 'user','id', 'question','answer','start_question','end_question','start_answer','end_answer')
+    list_display = ('document', 'user','id', 'question','answer','start_answer','end_answer')
     ordering = ('document',)
     search_fields = ('document',)
 

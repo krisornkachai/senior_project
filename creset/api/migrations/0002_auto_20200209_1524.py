@@ -23,8 +23,6 @@ class Migration(migrations.Migration):
                 ('updated_at', models.DateTimeField(auto_now=True)),
                 ('question', models.CharField(max_length=500)),
                 ('answer', models.CharField(max_length=500)),
-                ('start_question', models.IntegerField()),
-                ('end_question', models.IntegerField()),
                 ('start_answer', models.IntegerField()),
                 ('end_answer', models.IntegerField()),
                 ('document', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='qaDataset_annotations', to='api.Document')),
@@ -49,6 +47,6 @@ class Migration(migrations.Migration):
         ),
         migrations.AlterUniqueTogether(
             name='qadatasetannotation',
-            unique_together={('document', 'user', 'id', 'question', 'answer', 'start_question', 'end_question', 'start_answer', 'end_answer')},
+            unique_together={('document', 'user', 'id', 'question', 'answer','start_answer', 'end_answer')},
         ),
     ]
