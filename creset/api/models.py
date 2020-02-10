@@ -151,10 +151,10 @@ class qaDatasetProject(Project):
         return 'qaDataset'
 
     def get_bundle_name_upload(self):
-        return 'upload_qa_dataset'
+        return 'upload_qaDataset'
 
     def get_bundle_name_download(self):
-        return 'download_qa_dataset'
+        return 'download_qaDataset'
 
     def get_annotation_serializer(self):
         from .serializers import qaDatasetAnnotationSerializer

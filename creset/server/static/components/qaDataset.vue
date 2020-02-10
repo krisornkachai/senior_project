@@ -61,7 +61,12 @@ export default {
 
       const docId = this.docs[this.pageNumber].id;
       const payload = {
-        text: value,
+        question: value,
+        answer: "aaaaaa",
+        start_question: 12,
+        end_question: 13,
+        start_answer: 14,
+        end_answer: 15
       };
       HTTP.post(`docs/${docId}/annotations`, payload).then((response) => {
         this.annotations[this.pageNumber].push(response.data);
