@@ -3,22 +3,8 @@ extends ./annotation.pug
 
 block annotation-area
   div.card
-    header.card-header
-      div.card-header-title.has-background-royalblue
-        div.field.is-grouped.is-grouped-multiline
-          div.control(v-for="label in labels")
-            div.tags.has-addons
-              a.tag.is-medium(
-                v-shortkey.once="replaceNull(shortcutKey(label))"
-                v-bind:style="{ \
-                  color: label.text_color, \
-                  backgroundColor: label.background_color \
-                }"
-                v-on:click="annotate(label.id)"
-                v-on:shortkey="annotate(label.id)"
-              ) {{ label.text }}
-              span.tag.is-medium
-                kbd {{ shortcutKey(label) | simpleShortcut }}
+    a.button(v-on:click="annotate()") addData
+    
 
     div.card-content
       div.content.scrollable(v-if="docs[pageNumber] && annotations[pageNumber]", ref="textbox")
@@ -67,7 +53,7 @@ block annotation-area
 import annotationMixin from './annotationMixin';
 import todoFocus from './directives';
 import HTTP from './http';
-import Annotator from './annotator.vue';
+import Annotator from './annotator_qaDataset.vue';
 import { simpleShortcut } from './filter';
 
 export default {
@@ -87,7 +73,7 @@ export default {
       if (!value) {
         return;
       }
-
+      
       const docId = this.docs[this.pageNumber].id;
       const payload = {
         question: value,
@@ -134,15 +120,33 @@ export default {
       this.editedTodo = null;
       todo.question = this.beforeEditCache;
     },
-    annotate(labelId) {
-      this.$refs.annotator.addLabel(labelId);
+    annotate() {
+      //console.log(labelId)
+      this.$refs.annotator.addLabel();
     },
 
     addLabel(annotation) {
       const docId = this.docs[this.pageNumber].id;
-      HTTP.post(`docs/${docId}/annotations`, annotation).then((response) => {
+      console.log(annotation.start_offset);
+      console.log(annotation.text);
+      const value = this.newTodo && this.newTodo.trim();
+      if (!value) {
+        return;
+      }
+      
+     
+      const payload = {
+        question: value,
+        answer: "aaaaa",
+        start_answer: annotation.start_offset,
+        end_answer: annotation.end_offset
+      };
+      HTTP.post(`docs/${docId}/annotations`, payload).then((response) => {
         this.annotations[this.pageNumber].push(response.data);
       });
+
+      this.newTodo = '';
+
     },
 
     async submit() {

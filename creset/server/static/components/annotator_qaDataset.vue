@@ -45,23 +45,18 @@ export default {
 
   computed: {
     sortedEntityPositions() {
-      /* eslint-disable vue/no-side-effects-in-computed-properties */
+
       this.entityPositions = this.entityPositions.sort((a, b) => a.start_offset - b.start_offset);
       return this.entityPositions;
-      /* eslint-enable vue/no-side-effects-in-computed-properties */
+ 
     },
 
     chunks() {
       const res = [];
       let left = 0;
-      for (let i = 0; i < this.sortedEntityPositions.length; i++) {
-        const e = this.sortedEntityPositions[i];
-        const l = this.makeLabel(left, e.start_offset,this.text);
-        res.push(l);
-        res.push(e);
-        left = e.end_offset;
-      }
+    
       const l = this.makeLabel(left, this.text.length,this.text);
+      //console.log('chunks 59'+ this.text) //full text from doc
       res.push(l);
 
       return res;
@@ -206,6 +201,7 @@ export default {
           end_offset: this.endOffset,
           label: labelId,
         };
+        console.log('addLabel 204'+this.text)
         this.$emit('add-label', label);
       }
     },
