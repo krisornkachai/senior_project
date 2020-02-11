@@ -430,7 +430,6 @@ class JSONPainter(object):
             d['meta'] = json.loads(d['meta'])
             for a in d['annotations']:
                 a.pop('id')
-                a.pop('prob')
                 a.pop('document')
             data.append(d)
         return data

@@ -41,6 +41,7 @@ export default {
   data: () => ({
     startOffset: 0,
     endOffset: 0,
+    answer:'',
   }),
 
   computed: {
@@ -138,10 +139,15 @@ export default {
       let start;
       let end;
       if (window.getSelection) {
+        //console.log('window get sedlection'+window.getSelection())
         const range = window.getSelection().getRangeAt(0);
+        //console.log('window get sedlection get range at 0'+window.getSelection().getRangeAt(0))
         const preSelectionRange = range.cloneRange();
+        //console.log('window get sedlection clone range'+range.cloneRange())
         preSelectionRange.selectNodeContents(this.$el);
+        //console.log(' preSelectionRange.selectNodeContents(this.$el)'+ preSelectionRange.selectNodeContents(this.$el))
         preSelectionRange.setEnd(range.startContainer, range.startOffset);
+        //console.log('preSelectionRange.setEnd(range.startContainer, range.startOffset)'+preSelectionRange.setEnd(range.startContainer, range.startOffset))
         start = [...preSelectionRange.toString()].length;
         end = start + [...range.toString()].length;
       } else if (document.selection && document.selection.type !== 'Control') {
@@ -154,7 +160,9 @@ export default {
       }
       this.startOffset = start;
       this.endOffset = end;
-      console.log(start, end); // eslint-disable-line no-console
+      this.answer=this.text.substring(parseInt(start, 10),parseInt(end, 10));
+       //this.answer=this.text.substring(parseInt(start, 10),parseInt(end, 10));
+      console.log(start, end,this.text.substring(parseInt(start, 10),parseInt(end, 10))); // eslint-disable-line no-console
     },
 
     validRange() {
@@ -199,9 +207,10 @@ export default {
         const label = {
           start_offset: this.startOffset,
           end_offset: this.endOffset,
+          answer:this.answer,//data that sent to qaDataset.vue
           label: labelId,
         };
-        console.log('addLabel 204'+this.text)
+        //console.log('addLabel 204'+this.text)
         this.$emit('add-label', label);
       }
     },

@@ -2,8 +2,10 @@
 extends ./annotation.pug
 
 block annotation-area
+  
+  a.button(v-on:click="annotate()") addData
   div.card
-    a.button(v-on:click="annotate()") addData
+
     
 
     div.card-content
@@ -128,7 +130,7 @@ export default {
     addLabel(annotation) {
       const docId = this.docs[this.pageNumber].id;
       console.log(annotation.start_offset);
-      console.log(annotation.text);
+      console.log(annotation.answer);
       const value = this.newTodo && this.newTodo.trim();
       if (!value) {
         return;
@@ -137,7 +139,7 @@ export default {
      
       const payload = {
         question: value,
-        answer: "aaaaa",
+        answer: annotation.answer,
         start_answer: annotation.start_offset,
         end_answer: annotation.end_offset
       };
