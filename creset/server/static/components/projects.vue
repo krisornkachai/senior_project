@@ -6,7 +6,7 @@
           div.column.is-10.is-offset-1
 
             
-            a.button.is-medium.is-primary(v-on:click="isActive = !isActive") Create Project
+          
 
 
 
