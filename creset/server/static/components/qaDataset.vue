@@ -3,7 +3,7 @@ extends ./annotation.pug
 
 block annotation-area
   
-  a.button(v-on:click="annotate()") addData
+  
   div.card
 
     
@@ -19,6 +19,8 @@ block annotation-area
           v-on:add-label="addLabel"
           ref="annotator"
         )
+
+  a.button.is-medium.is-primary(v-on:click="annotate()") add data
 
 
   section.todoapp
