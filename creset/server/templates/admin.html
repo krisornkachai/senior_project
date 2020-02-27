@@ -24,6 +24,12 @@
   </span>
   <b>Export Data</b>
 </a>
+<a class="navbar-item" href="{% url 'project_team' view.kwargs.project_id %}">
+  <span class="icon">
+    <i class="fas fa-download"></i>
+  </span>
+  <b>project team</b>
+</a>
 {% endblock %}
 {% block content %}
 <div class="columns mr0">

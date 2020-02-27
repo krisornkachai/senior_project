@@ -37,7 +37,8 @@ urlpatterns = [
     path('projects/<int:project_id>/docs/upload',
          TextUploadAPI.as_view(), name='doc_uploader'),
     path('projects/<int:project_id>/docs/download',
-         TextDownloadAPI.as_view(), name='doc_downloader')
+         TextDownloadAPI.as_view(), name='doc_downloader'),
+   
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns, allowed=['json', 'xml'])

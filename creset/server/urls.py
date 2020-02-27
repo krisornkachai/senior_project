@@ -28,4 +28,6 @@ urlpatterns = [
     path('demo/named-entity-recognition/',
          DemoNamedEntityRecognition.as_view(), name='demo-named-entity-recognition'),
     path('demo/translation/', DemoTranslation.as_view(), name='demo-translation'),
+    path('projects/<int:project_id>/docs/project_team',
+         DataDownload.as_view(), name='project_team'),
 ]

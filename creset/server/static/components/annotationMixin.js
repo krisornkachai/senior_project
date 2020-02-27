@@ -118,6 +118,7 @@ export default {
       } else {
         this.resetScrollbar();
       }
+    
     },
 
     async prevPage() {
@@ -158,12 +159,16 @@ export default {
     },
 
     async search() {
+      console.log('url search annotationMaxmin='+this.url);
       await HTTP.get(this.url).then((response) => {
         this.docs = response.data.results;
         this.next = removeHost(response.data.next);
         this.prev = removeHost(response.data.previous);
         this.count = response.data.count;
         this.annotations = this.docs.map(doc => doc.annotations);
+        //console.log('this docs = ' + this.docs)
+        //console.log('this.annotations='+this.annotations);
+        //console.log('page_number = '+this.pageNumber)
         this.offset = getOffsetFromUrl(this.url);
         this.prevLimit = this.limit;
         if (this.next || this.prevLimit) {

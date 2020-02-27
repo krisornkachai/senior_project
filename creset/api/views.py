@@ -55,8 +55,8 @@ class ProjectDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
     lookup_url_kwarg = 'project_id'
-    permission_classes = (IsAuthenticated, IsProjectUser, IsAdminUserAndWriteOnly)
-
+    #permission_classes = (IsAuthenticated, IsProjectUser, IsAdminUserAndWriteOnly)
+    permission_classes = (IsAuthenticated, IsAdminUserAndWriteOnly)
 
 class StatisticsAPI(APIView):
     pagination_class = None
@@ -101,23 +101,25 @@ class ApproveLabelsAPI(APIView):
 class LabelList(generics.ListCreateAPIView):
     serializer_class = LabelSerializer
     pagination_class = None
-    permission_classes = (IsAuthenticated, IsProjectUser, IsAdminUserAndWriteOnly)
+    #permission_classes = (IsAuthenticated, IsProjectUser, IsAdminUserAndWriteOnly)
+    permission_classes = (IsAuthenticated,)
 
     def get_queryset(self):
         project = get_object_or_404(Project, pk=self.kwargs['project_id'])
         return project.labels
 
     def perform_create(self, serializer):
-        project = get_object_or_404(Project, pk=self.kwargs['project_id'])
-        serializer.save(project=project)
+        if((IsProjectUser==True) and (IsAdminUserAndWriteOnly==True)):
+            project = get_object_or_404(Project, pk=self.kwargs['project_id'])
+            serializer.save(project=project)
 
 
 class LabelDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Label.objects.all()
     serializer_class = LabelSerializer
     lookup_url_kwarg = 'label_id'
-    permission_classes = (IsAuthenticated, IsProjectUser, IsAdminUserAndWriteOnly)
-
+    #permission_classes = (IsAuthenticated, IsProjectUser, IsAdminUserAndWriteOnly)
+    permission_classes = (IsAuthenticated,)
 
 class DocumentList(generics.ListCreateAPIView):
     serializer_class = DocumentSerializer
@@ -126,8 +128,8 @@ class DocumentList(generics.ListCreateAPIView):
     ordering_fields = ('created_at', 'updated_at', 'doc_annotations__updated_at',
                        'seq_annotations__updated_at', 'seq2seq_annotations__updated_at')
     filter_class = DocumentFilter
-    permission_classes = (IsAuthenticated, IsProjectUser, IsAdminUserAndWriteOnly)
-
+    #permission_classes = (IsAuthenticated, IsProjectUser, IsAdminUserAndWriteOnly)
+    permission_classes = (IsAuthenticated, IsAdminUserAndWriteOnly)
     def get_queryset(self):
         project = get_object_or_404(Project, pk=self.kwargs['project_id'])
 
@@ -135,24 +137,27 @@ class DocumentList(generics.ListCreateAPIView):
 
         if project.randomize_document_order:
             queryset = queryset.annotate(sort_id=F('id') % self.request.user.id).order_by('sort_id')
-
+        
         return queryset
 
     def perform_create(self, serializer):
-        project = get_object_or_404(Project, pk=self.kwargs['project_id'])
-        serializer.save(project=project)
+        if(IsProjectUser==True):
+            project = get_object_or_404(Project, pk=self.kwargs['project_id'])
+            serializer.save(project=project)
 
 
 class DocumentDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Document.objects.all()
     serializer_class = DocumentSerializer
     lookup_url_kwarg = 'doc_id'
-    permission_classes = (IsAuthenticated, IsProjectUser, IsAdminUserAndWriteOnly)
+    #permission_classes = (IsAuthenticated, IsProjectUser, IsAdminUserAndWriteOnly)
+    permission_classes = (IsAuthenticated, IsAdminUserAndWriteOnly)
 
 
 class AnnotationList(generics.ListCreateAPIView):
     pagination_class = None
-    permission_classes = (IsAuthenticated, IsProjectUser)
+    #permission_classes = (IsAuthenticated, IsProjectUser)
+    permission_classes = (IsAuthenticated,IsProjectUser)
 
     def get_serializer_class(self):
         project = get_object_or_404(Project, pk=self.kwargs['project_id'])
@@ -181,11 +186,12 @@ class AnnotationList(generics.ListCreateAPIView):
 class AnnotationDetail(generics.RetrieveUpdateDestroyAPIView):
     lookup_url_kwarg = 'annotation_id'
     permission_classes = (IsAuthenticated, IsProjectUser, IsOwnAnnotation)
-
+    #permission_classes = (IsAuthenticated,)
     def get_serializer_class(self):
-        project = get_object_or_404(Project, pk=self.kwargs['project_id'])
-        self.serializer_class = project.get_annotation_serializer()
-        return self.serializer_class
+        if(IsProjectUser):
+            project = get_object_or_404(Project, pk=self.kwargs['project_id'])
+            self.serializer_class = project.get_annotation_serializer()
+            return self.serializer_class
 
     def get_queryset(self):
         project = get_object_or_404(Project, pk=self.kwargs['project_id'])
