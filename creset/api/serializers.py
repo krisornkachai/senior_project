@@ -62,7 +62,7 @@ class DocumentSerializer(serializers.ModelSerializer):
         serializer = project.get_annotation_serializer()
         annotations = model.objects.filter(document=instance.id)
         if request and not project.collaborative_annotation:
-            annotations = annotations.filter(user=request.user)
+            annotations = annotations
         serializer = serializer(annotations, many=True)
         return serializer.data
 

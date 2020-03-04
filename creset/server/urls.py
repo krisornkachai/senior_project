@@ -2,7 +2,7 @@ from django.urls import path
 
 from .views import IndexView
 from .views import ProjectView, DatasetView, DataUpload, LabelView, StatsView, GuidelineView
-from .views import ProjectsView, DataDownload
+from .views import ProjectsView, DataDownload,project_team_setingView
 from .views import DemoTextClassification, DemoNamedEntityRecognition, DemoTranslation
 
 
@@ -29,5 +29,5 @@ urlpatterns = [
          DemoNamedEntityRecognition.as_view(), name='demo-named-entity-recognition'),
     path('demo/translation/', DemoTranslation.as_view(), name='demo-translation'),
     path('projects/<int:project_id>/docs/project_team',
-         DataDownload.as_view(), name='project_team'),
+         project_team_setingView.as_view(), name='project_team'),
 ]

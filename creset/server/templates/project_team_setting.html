@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% load static %}
+{% load render_bundle from webpack_loader %}
+{% load widget_tweaks %}
+{% block content %}
+<div id="project_team_setting"></div>
+{% endblock %}
+{% block footer %}
+{% render_bundle 'project_team_setting' 'js' %}
+{% endblock %}

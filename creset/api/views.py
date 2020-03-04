@@ -98,6 +98,23 @@ class ApproveLabelsAPI(APIView):
         return Response(DocumentSerializer(document).data)
 
 
+class addTeamProject(APIView):
+    permission_classes = (IsAuthenticated, IsProjectUser)
+
+    def post(self, request, *args, **kwargs):
+        project = get_object_or_404(Project, pk=self.kwargs['project_id'])
+
+        project.users.add(str(self.kwargs['team_project_id']))
+        project.save()
+        return Response(ProjectSerializer(project).data)
+    
+    '''def get(self, request, *args, **kwargs):
+        project = get_object_or_404(Project, pk=self.kwargs['project_id'])
+        project.create(users='4')
+        project.save()
+        return Response(ProjectSerializer(Project).data)'''
+    
+
 class LabelList(generics.ListCreateAPIView):
     serializer_class = LabelSerializer
     pagination_class = None
@@ -156,8 +173,8 @@ class DocumentDetail(generics.RetrieveUpdateDestroyAPIView):
 
 class AnnotationList(generics.ListCreateAPIView):
     pagination_class = None
-    #permission_classes = (IsAuthenticated, IsProjectUser)
-    permission_classes = (IsAuthenticated,IsProjectUser)
+    permission_classes = (IsAuthenticated, IsProjectUser)
+    #permission_classes = (IsAuthenticated,)
 
     def get_serializer_class(self):
         project = get_object_or_404(Project, pk=self.kwargs['project_id'])
@@ -185,7 +202,7 @@ class AnnotationList(generics.ListCreateAPIView):
 
 class AnnotationDetail(generics.RetrieveUpdateDestroyAPIView):
     lookup_url_kwarg = 'annotation_id'
-    permission_classes = (IsAuthenticated, IsProjectUser, IsOwnAnnotation)
+    permission_classes = (IsAuthenticated, IsProjectUser)
     #permission_classes = (IsAuthenticated,)
     def get_serializer_class(self):
         if(IsProjectUser):

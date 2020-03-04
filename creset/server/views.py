@@ -33,6 +33,9 @@ class ProjectsView(LoginRequiredMixin, TemplateView):
     template_name = 'projects.html'
 
 
+class project_team_setingView(LoginRequiredMixin, TemplateView):
+    template_name = 'project_team_setting.html'
+
 class DatasetView(SuperUserMixin, LoginRequiredMixin, ListView):
     template_name = 'dataset.html'
     paginate_by = 5

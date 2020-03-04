@@ -11,7 +11,7 @@
 
 
             p(v-if="isSuperuser")
-              a.button.is-medium.is-primary(v-on:click="isActive = !isActive") Create Project
+              a.button.is-medium.is-primary(v-on:click="isActive = !isActive") add team project
 
     div.modal(v-bind:class="{ 'is-active': isActive }")
       div.modal-background
@@ -22,53 +22,20 @@
 
         section.modal-card-body
           div.field
-            label.label Project Name
+            label.label Project id
             div.control
-              input.input(v-model="projectName", type="text", required, placeholder="Project name")
+              input.input(v-model="project_id", type="text", required, placeholder="Project id for add team project")
             p.help.is-danger {{ projectNameError }}
 
           div.field
-            label.label Description
+            label.label user id
             div.control
-              textarea.textarea(v-model="description", required, placeholder="Project description")
+              input.input(v-model="user_id", required, placeholder="user id for add team project")
             p.help.is-danger {{ descriptionError }}
 
-          div.field
-            label.label Project Type
-
-            div.control
-              select(v-model="projectType", name="project_type", required)
-                option(value="", selected="selected") ---------
-                option(value="DocumentClassification") document classification
-                option(value="SequenceLabeling") sequence labeling
-                option(value="Seq2seq") sequence to sequence
-                option(value="qaDataset") create qa dataset
-            p.help.is-danger {{ projectTypeError }}
-
-          div.field
-            label.checkbox
-              input(
-                v-model="randomizeDocumentOrder"
-                name="randomize_document_order"
-                type="checkbox"
-                style="margin-right: 0.25em;"
-                required
-              )
-              | Randomize document order per user
-
-          div.field
-            label.checkbox
-              input(
-                v-model="collaborativeAnnotation"
-                name="collaborative_annotation"
-                type="checkbox"
-                style="margin-right: 0.25em;"
-                required
-              )
-              | Share annotations across all users
 
         footer.modal-card-foot.pt20.pb20.pr20.pl20.has-background-white-ter
-          button.button.is-primary(v-on:click="create()") Create
+          button.button.is-primary(v-on:click="create()") add
           button.button(v-on:click="isActive = !isActive") Cancel
 
     div.modal(v-bind:class="{ 'is-active': isDelete }")
@@ -126,6 +93,9 @@
                           span.tag.is-normal {{ project.project_type }}
 
                         td.is-vertical(v-if="isSuperuser")
+                          a(v-on:click="addTeamProject(project)") add team
+
+                        td.is-vertical(v-if="isSuperuser")
                           a(v-bind:href="'/projects/' + project.id + '/docs'") Edit
 
                         td.is-vertical(v-if="isSuperuser")
@@ -140,6 +110,8 @@ export default {
   filters: { title, daysAgo },
 
   data: () => ({
+    project_id:'',
+    user_id:'',
     items: [],
     isActive: false,
     isDelete: false,
@@ -187,6 +159,9 @@ export default {
       this.project = project;
       this.isDelete = true;
     },
+    addTeamProject(project) {
+      this.project = project;
+    },
 
     matchType(projectType) {
       if (projectType === 'DocumentClassification') {
@@ -206,33 +181,13 @@ export default {
 
     create() {
       const payload = {
-        name: this.projectName,
-        description: this.description,
-        project_type: this.projectType,
-        randomize_document_order: this.randomizeDocumentOrder,
-        collaborative_annotation: this.collaborativeAnnotation,
-        guideline: 'Please write annotation guideline.',
-        resourcetype: this.resourceType(),
+        user_id: this.user_id,
+        project_id: this.project_id,
+
       };
-      defaultHttpClient.post('/v1/projects', payload)
-        /*.then((response) => {
-          //window.location = `/projects/${response.data.id}/docs/create`;
-          window.location = `/projects/`;
-        })
-        .catch((error) => {
-          this.projectTypeError = '';
-          this.projectNameError = '';
-          this.descriptionError = '';
-          if ('resourcetype' in error.response.data) {
-            this.projectTypeError = error.response.data.resourcetype;
-          }
-          if ('name' in error.response.data) {
-            this.projectNameError = error.response.data.name[0];
-          }
-          if ('description' in error.response.data) {
-            this.descriptionError = error.response.data.description[0];
-          }
-        });*/
+      defaultHttpClient.post(`/v1/projects/${this.project_id}/add_team_project/${this.user_id}`, payload)
+      
+        
     },
 
     resourceType() {

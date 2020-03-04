@@ -4,7 +4,7 @@ from rest_framework.urlpatterns import format_suffix_patterns
 
 from .views import Me, Features
 from .views import ProjectList, ProjectDetail
-from .views import LabelList, LabelDetail, ApproveLabelsAPI
+from .views import LabelList, LabelDetail, ApproveLabelsAPI,addTeamProject
 from .views import DocumentList, DocumentDetail
 from .views import AnnotationList, AnnotationDetail
 from .views import TextUploadAPI, TextDownloadAPI, CloudUploadAPI
@@ -38,6 +38,8 @@ urlpatterns = [
          TextUploadAPI.as_view(), name='doc_uploader'),
     path('projects/<int:project_id>/docs/download',
          TextDownloadAPI.as_view(), name='doc_downloader'),
+    path('projects/<int:project_id>/add_team_project/<int:team_project_id>',
+         addTeamProject.as_view(), name='add_team_project'),
    
 ]
 
