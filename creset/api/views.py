@@ -126,9 +126,8 @@ class LabelList(generics.ListCreateAPIView):
         return project.labels
 
     def perform_create(self, serializer):
-        if((IsProjectUser==True) and (IsAdminUserAndWriteOnly==True)):
-            project = get_object_or_404(Project, pk=self.kwargs['project_id'])
-            serializer.save(project=project)
+        project = get_object_or_404(Project, pk=self.kwargs['project_id'])
+        serializer.save(project=project)
 
 
 class LabelDetail(generics.RetrieveUpdateDestroyAPIView):

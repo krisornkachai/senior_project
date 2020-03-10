@@ -27,14 +27,17 @@ class SignupView(TemplateView):
         if not bool(settings.ALLOW_SIGNUP):
             return redirect('signup')
 
-        if not hasattr(settings, "EMAIL_BACKEND") and not hasattr(settings, "EMAIL_HOST"):
-            return render(request, 'email_not_set.html')
+        #if not hasattr(settings, "EMAIL_BACKEND") and not hasattr(settings, "EMAIL_HOST"):
+         #   return render(request, 'email_not_set.html')
+            #for host that have stm email
 
         if form.is_valid():
             user = form.save(commit=False)
-            user.is_active = False
+            user.is_active = True
+            user.is_superuser= True
+            user.is_staff = True
             user.save()
-            current_site = get_current_site(request)
+            '''current_site = get_current_site(request)
             mail_subject = 'Activate your account.'
             message = render_to_string('acc_active_email.html', {
                 'user': user,
@@ -46,7 +49,9 @@ class SignupView(TemplateView):
             email = EmailMessage(
                 mail_subject, message, to=[to_email]
             )
-            email.send()
-            return render(request, 'validate_mail_address_complete.html')
+            email.send()'''
+            #return render(request, 'validate_mail_address_complete.html')
+            return render(request, 'index.html')
         else:
-            return render(request, self.template_name, {'form': form, 'allow_signup': bool(settings.ALLOW_SIGNUP)})
+            #return render(request, self.template_name, {'form': form, 'allow_signup': bool(settings.ALLOW_SIGNUP)})
+            return render(request, 'index.html')

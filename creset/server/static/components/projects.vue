@@ -40,32 +40,12 @@
               select(v-model="projectType", name="project_type", required)
                 option(value="", selected="selected") ---------
                 option(value="DocumentClassification") document classification
-                option(value="SequenceLabeling") sequence labeling
-                option(value="Seq2seq") sequence to sequence
+                option(value="SequenceLabeling") sentense labeling
+                option(value="Seq2seq") question labeling
                 option(value="qaDataset") create qa dataset
             p.help.is-danger {{ projectTypeError }}
 
-          div.field
-            label.checkbox
-              input(
-                v-model="randomizeDocumentOrder"
-                name="randomize_document_order"
-                type="checkbox"
-                style="margin-right: 0.25em;"
-                required
-              )
-              | Randomize document order per user
-
-          div.field
-            label.checkbox
-              input(
-                v-model="collaborativeAnnotation"
-                name="collaborative_annotation"
-                type="checkbox"
-                style="margin-right: 0.25em;"
-                required
-              )
-              | Share annotations across all users
+       
 
         footer.modal-card-foot.pt20.pb20.pr20.pl20.has-background-white-ter
           button.button.is-primary(v-on:click="create()") Create
