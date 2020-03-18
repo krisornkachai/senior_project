@@ -330,22 +330,13 @@ class PlainTextParser(FileParser):
             print(batch)
             print('end print batch==========================================================')
             #batch.remove('\n')
-            try:
-                batch.remove('')
-            except:
-                pass
-            
-            try:
-                batch.remove(repr('\n'))
-            except:
-                pass
-            try:
-                batch.remove(None)
-            except:
-                pass
-            for count,line in enumerate(batch,0):
-                if(line=='\n'):
-                    batch.remove('\n')
+
+            for count,line_input in enumerate(batch,0):
+                if(line_input=='\n'):
+                    batch.remove(batch[count])
+            for count,line_input in enumerate(batch,0):#ที่ต้องมีสอง ลูปซ้ำกันนี้ก็คือถ้ามีลูแเดียวข้อความสั้นทำงานได้แต่ข้อความยาวๆทำงานไม่ได้ ถ้ามีบัคว่าว่างอีกน่าจะต้องเพิ่มอีกลูแ
+                if(line_input=='\n'):
+                    batch.remove(batch[count])
             print(batch)
             print('end print batch==========================================================')
             print('batch ----------------------------------------------------')
