@@ -63,6 +63,8 @@ export default {
     upload() {
       this.isLoading = true;
       this.file = this.$refs.file.files[0];
+      //console.log(this.file);
+      //window.alert(this.file);
       const formData = new FormData();
       formData.append('file', this.file);
       formData.append('format', this.format);

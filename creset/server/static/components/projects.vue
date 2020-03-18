@@ -106,7 +106,7 @@
                           span.tag.is-normal {{ project.project_type }}
 
                         td.is-vertical(v-if="isSuperuser")
-                          a(v-bind:href="'/projects/' + project.id + '/docs'") Edit
+                          a(v-bind:href="'/projects/' + project.id + '/docs'") manage project
 
                         td.is-vertical(v-if="isSuperuser")
                           a.has-text-danger(v-on:click="setProject(project)") Delete
@@ -195,7 +195,7 @@ export default {
         resourcetype: this.resourceType(),
       };
       defaultHttpClient.post('/v1/projects', payload)
-        /*.then((response) => {
+        .then((response) => {
           //window.location = `/projects/${response.data.id}/docs/create`;
           window.location = `/projects/`;
         })
@@ -212,7 +212,7 @@ export default {
           if ('description' in error.response.data) {
             this.descriptionError = error.response.data.description[0];
           }
-        });*/
+        });
     },
 
     resourceType() {

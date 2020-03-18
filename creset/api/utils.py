@@ -323,11 +323,44 @@ class PlainTextParser(FileParser):
     """
     def parse(self, file):
         file = io.TextIOWrapper(file, encoding='utf-8')
+
+        print('plainTextParser -----------------------------------------------')
+        while True:
+            batch = list(itertools.islice(file, settings.IMPORT_BATCH_SIZE))
+            print(batch)
+            print('end print batch==========================================================')
+            #batch.remove('\n')
+            try:
+                batch.remove('')
+            except:
+                pass
+            
+            try:
+                batch.remove(repr('\n'))
+            except:
+                pass
+            try:
+                batch.remove(None)
+            except:
+                pass
+            for count,line in enumerate(batch,0):
+                if(line=='\n'):
+                    batch.remove('\n')
+            print(batch)
+            print('end print batch==========================================================')
+            print('batch ----------------------------------------------------')
+            for line in batch:
+                print(line)
+                print('end line-----------------------------------------------------------')
+            if not batch:
+                break
+            yield [{'text': line.strip()} for line in batch]
+        '''file = io.TextIOWrapper(file, encoding='utf-8')
         while True:
             batch = list(itertools.islice(file, settings.IMPORT_BATCH_SIZE))
             if not batch:
                 break
-            yield [{'text': line.strip()} for line in batch]
+            yield [{'text': line.strip()} for line in batch]'''
 
 
 class CSVParser(FileParser):

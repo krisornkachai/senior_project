@@ -208,6 +208,14 @@ export default {
   }),
 
   created() {
+    this.newLabel = {
+        text: '',
+        prefix_key: null,
+        suffix_key: null,
+        background_color: '#209cee',
+        text_color: '#ffffff',
+      };
+      this.setColor(this.newLabel);
     HTTP.get('labels').then((response) => {
       this.labels = response.data;
       this.sortLabels();
@@ -266,7 +274,17 @@ export default {
           console.log(error); // eslint-disable-line no-console
           this.messages.push('You cannot use same label name or shortcut key.');
         });
-    },
+      
+    this.newLabel = {
+        text: '',
+        prefix_key: null,
+        suffix_key: null,
+        background_color: '#209cee',
+        text_color: '#ffffff',
+      };
+      this.setColor(this.newLabel);
+      
+      },
 
     removeLabel(label) {
       const labelId = label.id;
@@ -288,7 +306,15 @@ export default {
     },
 
     cancelCreate() {
-      this.newLabel = null;
+      //this.newLabel = null;
+      this.newLabel = {
+        text: '',
+        prefix_key: null,
+        suffix_key: null,
+        background_color: '#209cee',
+        text_color: '#ffffff',
+      };
+      this.setColor(this.newLabel);
     },
 
     editLabel(label) {

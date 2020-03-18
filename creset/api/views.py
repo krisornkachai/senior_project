@@ -222,6 +222,7 @@ class TextUploadAPI(APIView):
 
     def post(self, request, *args, **kwargs):
         if 'file' not in request.data:
+            print('textuploadAPI  ----------------------------------------------------------')
             raise ParseError('Empty content')
 
         self.save_file(
