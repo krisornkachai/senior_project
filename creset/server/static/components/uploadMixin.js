@@ -14,6 +14,7 @@ export default {
   components: { Messages },
 
   data: () => ({
+    i:0,
     file: '',
     messages: [],
     format: 'json',
@@ -62,8 +63,11 @@ export default {
 
     upload() {
       this.isLoading = true;
-      this.file = this.$refs.file.files[0];
-      //console.log(this.file);
+      //console.log('this.$refs.file.files.lengeht'+this.$refs.file.files.length);
+      //window.alert('this.$refs.file.files.lengeht'+this.$refs.file.files.length);
+      for(this.i = 0 ; this.i < this.$refs.file.files.length;this.i++){
+      this.file = this.$refs.file.files[this.i];
+      console.log('this.i loop'+this.i);
       //window.alert(this.file);
       const formData = new FormData();
       formData.append('file', this.file);
@@ -74,16 +78,18 @@ export default {
           headers: {
             'Content-Type': 'multipart/form-data',
           },
-        })
-        .then((response) => {
-          console.log(response); // eslint-disable-line no-console
-          this.messages = [];
-          window.location = this.postUploadUrl;
-        })
-        .catch((error) => {
-          this.isLoading = false;
-          this.handleError(error);
         });
+        // .then((response) => {
+        //   console.log(response); // eslint-disable-line no-console
+        //   this.messages = [];
+        //   window.location = this.postUploadUrl;
+        // })
+        // .catch((error) => {
+        //   this.isLoading = false;
+        //   this.handleError(error);
+        // });
+      }
+
     },
 
     handleError(error) {
