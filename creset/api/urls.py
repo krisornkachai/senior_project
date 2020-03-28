@@ -7,8 +7,9 @@ from .views import ProjectList, ProjectDetail
 from .views import LabelList, LabelDetail, ApproveLabelsAPI,addTeamProject
 from .views import DocumentList, DocumentDetail
 from .views import AnnotationList, AnnotationDetail
-from .views import TextUploadAPI, TextDownloadAPI, CloudUploadAPI
+from .views import TextUploadAPI, TextDownloadAPI, CloudUploadAPI,TextUploadAPI_file
 from .views import StatisticsAPI
+
 
 
 urlpatterns = [
@@ -36,6 +37,8 @@ urlpatterns = [
          AnnotationDetail.as_view(), name='annotation_detail'),
     path('projects/<int:project_id>/docs/upload',
          TextUploadAPI.as_view(), name='doc_uploader'),
+    path('projects/<int:project_id>/docs/upload_file',
+         TextUploadAPI_file.as_view(), name='doc_uploader_file'),
     path('projects/<int:project_id>/docs/download',
          TextDownloadAPI.as_view(), name='doc_downloader'),
     path('projects/<int:project_id>/add_team_project/<int:team_project_id>',

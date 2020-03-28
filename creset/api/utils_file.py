@@ -323,7 +323,8 @@ class PlainTextParser(FileParser):
     """
     def parse(self, file):
         file = io.TextIOWrapper(file, encoding='utf-8')
-
+        file_return =''
+        
         print('plainTextParser -----------------------------------------------')
         while True:
             batch = list(itertools.islice(file, settings.IMPORT_BATCH_SIZE))
@@ -344,11 +345,14 @@ class PlainTextParser(FileParser):
             print('end print batch==========================================================')
             print('batch ----------------------------------------------------')
             for line in batch:
+                file_return = file_return + line
                 print(line)
                 print('end line-----------------------------------------------------------')
             if not batch:
                 break
-            yield [{'text': line.strip()} for line in batch]
+            print('this is uitls_file^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^')
+            yield [{'text': file_return.strip()} ]
+
         '''file = io.TextIOWrapper(file, encoding='utf-8')
         while True:
             batch = list(itertools.islice(file, settings.IMPORT_BATCH_SIZE))

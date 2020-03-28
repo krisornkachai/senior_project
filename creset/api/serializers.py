@@ -145,10 +145,10 @@ class DocumentAnnotationSerializer(serializers.ModelSerializer):
     # label = ProjectFilteredPrimaryKeyRelatedField(queryset=Label.objects.all())
     label = serializers.PrimaryKeyRelatedField(queryset=Label.objects.all())
     document = serializers.PrimaryKeyRelatedField(queryset=Document.objects.all())
-
+    
     class Meta:
         model = DocumentAnnotation
-        fields = ('id', 'prob', 'label', 'user', 'document')
+        fields = ('id', 'label', 'user', 'document')
         read_only_fields = ('user', )
 
 

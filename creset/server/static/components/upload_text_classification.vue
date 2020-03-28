@@ -50,7 +50,7 @@ block example-format-area
 </template>
 
 <script>
-import uploadMixin from './uploadMixin';
+import uploadMixin from './uploadMixin_file';
 
 export default uploadMixin;
 </script>

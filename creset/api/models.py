@@ -84,7 +84,7 @@ class TextClassificationProject(Project):
         return DocumentAnnotation
 
     def get_storage(self, data):
-        from .utils import ClassificationStorage
+        from .utils_file import ClassificationStorage
         return ClassificationStorage(data, self)
 
 
@@ -237,6 +237,7 @@ class Annotation(models.Model):
 class DocumentAnnotation(Annotation):
     document = models.ForeignKey(Document, related_name='doc_annotations', on_delete=models.CASCADE)
     label = models.ForeignKey(Label, on_delete=models.CASCADE)
+    
 
     class Meta:
         unique_together = ('document', 'user', 'label')

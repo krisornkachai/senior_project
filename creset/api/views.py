@@ -20,7 +20,7 @@ from .serializers import ProjectPolymorphicSerializer
 from .utils import CSVParser, ExcelParser, JSONParser, PlainTextParser, CoNLLParser, iterable_to_io
 from .utils import JSONLRenderer
 from .utils import JSONPainter, CSVPainter
-
+from .utils_file import PlainTextParser as PlainTextParser_file
 
 class Me(APIView):
     permission_classes = (IsAuthenticated,)
@@ -246,6 +246,47 @@ class TextUploadAPI(APIView):
     def select_parser(cls, file_format):
         if file_format == 'plain':
             return PlainTextParser()
+        elif file_format == 'csv':
+            return CSVParser()
+        elif file_format == 'json':
+            return JSONParser()
+        elif file_format == 'conll':
+            return CoNLLParser()
+        elif file_format == 'excel':
+            return ExcelParser()
+        else:
+            raise ValidationError('format {} is invalid.'.format(file_format))
+
+class TextUploadAPI_file(APIView):
+    parser_classes = (MultiPartParser,)
+    permission_classes = (IsAuthenticated, IsProjectUser, IsAdminUser)
+
+    def post(self, request, *args, **kwargs):
+        if 'file' not in request.data:
+            print('textuploadAPI  ----------------------------------------------------------')
+            raise ParseError('Empty content')
+
+        self.save_file(
+            user=request.user,
+            file=request.data['file'],
+            file_format=request.data['format'],
+            project_id=kwargs['project_id'],
+        )
+
+        return Response(status=status.HTTP_201_CREATED)
+
+    @classmethod
+    def save_file(cls, user, file, file_format, project_id):
+        project = get_object_or_404(Project, pk=project_id)
+        parser = cls.select_parser(file_format)
+        data = parser.parse(file)
+        storage = project.get_storage(data)
+        storage.save(user)
+
+    @classmethod
+    def select_parser(cls, file_format):
+        if file_format == 'plain':
+            return PlainTextParser_file()
         elif file_format == 'csv':
             return CSVParser()
         elif file_format == 'json':
