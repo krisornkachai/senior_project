@@ -263,7 +263,7 @@ class SequenceAnnotation(Annotation):
 class Seq2seqAnnotation(Annotation):
     # Override AnnotationManager for custom functionality
     objects = Seq2seqAnnotationManager()
-    sentence = models.CharField(max_length=500,default='none')
+    sentence = models.CharField(max_length=5000,default='none')
 
     document = models.ForeignKey(Document, related_name='seq2seq_annotations', on_delete=models.CASCADE)
     text = models.CharField(max_length=500)

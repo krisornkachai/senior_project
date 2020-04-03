@@ -58,7 +58,7 @@ export default {
       if (!value) {
         return;
       }
-      // console.log('testtt'+this.docs[this.pageNumber].text);
+      console.log('testtt'+this.docs[this.pageNumber].text);
       const docId = this.docs[this.pageNumber].id;
       const payload = {
         text: value,

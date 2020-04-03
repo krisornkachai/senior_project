@@ -152,7 +152,7 @@ class DocumentAnnotationSerializer(serializers.ModelSerializer):
     class Meta:
         model = DocumentAnnotation
         # fields = ('id', 'label', 'user','label_id','annotation_text')
-        fields = ('id','annotation_text')
+        fields = ('id','annotation_text','label')
         read_only_fields = ('user', )
 
 
@@ -163,7 +163,7 @@ class SequenceAnnotationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = SequenceAnnotation
-        fields = ('id', 'start_offset', 'end_offset','annotation_text')
+        fields = ('id', 'start_offset', 'end_offset','annotation_text','label')
         read_only_fields = ('user',)
 
 
