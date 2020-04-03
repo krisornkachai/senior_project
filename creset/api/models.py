@@ -237,10 +237,11 @@ class Annotation(models.Model):
 class DocumentAnnotation(Annotation):
     document = models.ForeignKey(Document, related_name='doc_annotations', on_delete=models.CASCADE)
     label = models.ForeignKey(Label, on_delete=models.CASCADE)
+    annotation_text = models.CharField(max_length=500,default='none')
     
 
     class Meta:
-        unique_together = ('document', 'user', 'label')
+        unique_together = ('document', 'user', 'label','annotation_text')
 
 
 class SequenceAnnotation(Annotation):
@@ -248,24 +249,27 @@ class SequenceAnnotation(Annotation):
     label = models.ForeignKey(Label, on_delete=models.CASCADE)
     start_offset = models.IntegerField()
     end_offset = models.IntegerField()
+    annotation_text = models.CharField(max_length=500,default='none')
+
 
     def clean(self):
         if self.start_offset >= self.end_offset:
             raise ValidationError('start_offset is after end_offset')
 
     class Meta:
-        unique_together = ('document', 'user', 'label', 'start_offset', 'end_offset')
+        unique_together = ('document', 'user', 'label', 'start_offset', 'end_offset','annotation_text')
 
 
 class Seq2seqAnnotation(Annotation):
     # Override AnnotationManager for custom functionality
     objects = Seq2seqAnnotationManager()
+    sentence = models.CharField(max_length=500,default='none')
 
     document = models.ForeignKey(Document, related_name='seq2seq_annotations', on_delete=models.CASCADE)
     text = models.CharField(max_length=500)
 
     class Meta:
-        unique_together = ('document', 'user', 'text')
+        unique_together = ('document', 'user', 'text','sentence')
 
 class qaDatasetAnnotation(Annotation):
     # Override AnnotationManager for custom functionality

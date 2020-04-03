@@ -41,6 +41,7 @@ export default {
   data: () => ({
     startOffset: 0,
     endOffset: 0,
+    text_anno:'',
   }),
 
   computed: {
@@ -159,7 +160,8 @@ export default {
       }
       this.startOffset = start;
       this.endOffset = end;
-      console.log(start, end); // eslint-disable-line no-console
+      
+      console.log(start, end,this.text_anno); // eslint-disable-line no-console
     },
 
     validRange() {
@@ -199,12 +201,15 @@ export default {
       return [...this.text].slice(r.start_offset, r.end_offset).join('');
     },
 
-    addLabel(labelId) {
+    addLabel(labelId,label_obj) {
+      console.log('test_addlabel print --------------tlabel_obj.text'+label_obj.text);
+      
       if (this.validRange()) {
         const label = {
           start_offset: this.startOffset,
           end_offset: this.endOffset,
           label: labelId,
+          annotation_text:label_obj.text,
         };
         this.$emit('add-label', label);
       }

@@ -454,10 +454,11 @@ class JSONPainter(object):
         serializer = DocumentSerializer(documents, many=True)
         data = []
         for d in serializer.data:
-            d['meta'] = json.loads(d['meta'])
+            #print('print d---------------'+d)
+            # d['meta'] = json.loads(d['meta'])
             for a in d['annotations']:
                 a.pop('id')
-                a.pop('document')
+                # a.pop('document')
             data.append(d)
         return data
 

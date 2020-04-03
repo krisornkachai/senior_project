@@ -53,7 +53,7 @@ class LabelSerializer(serializers.ModelSerializer):
 
 class DocumentSerializer(serializers.ModelSerializer):
     annotations = serializers.SerializerMethodField()
-    annotation_approver = serializers.SerializerMethodField()
+    # annotation_approver = serializers.SerializerMethodField()
 
     def get_annotations(self, instance):
         request = self.context.get('request')
@@ -73,7 +73,8 @@ class DocumentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Document
-        fields = ('id', 'text', 'annotations', 'meta', 'annotation_approver')
+        # fields = ('id', 'text', 'annotations', 'meta', 'annotation_approver')
+        fields = ('id', 'text', 'annotations')
 
 
 class ProjectSerializer(serializers.ModelSerializer):
@@ -143,38 +144,41 @@ class ProjectFilteredPrimaryKeyRelatedField(serializers.PrimaryKeyRelatedField):
 
 class DocumentAnnotationSerializer(serializers.ModelSerializer):
     # label = ProjectFilteredPrimaryKeyRelatedField(queryset=Label.objects.all())
-    label = serializers.PrimaryKeyRelatedField(queryset=Label.objects.all())
-    document = serializers.PrimaryKeyRelatedField(queryset=Document.objects.all())
     
+    # label = serializers.PrimaryKeyRelatedField(queryset=Label.objects.all())
+    # document = serializers.PrimaryKeyRelatedField(queryset=Document.objects.all())
+    # label_name_2 = serializers.PrimaryKeyRelatedField(queryset=Label.objects.all())
+    # label_name = serializers.CharField(source ='Label', read_only = True) 
     class Meta:
         model = DocumentAnnotation
-        fields = ('id', 'label', 'user', 'document')
+        # fields = ('id', 'label', 'user','label_id','annotation_text')
+        fields = ('id','annotation_text')
         read_only_fields = ('user', )
 
 
 class SequenceAnnotationSerializer(serializers.ModelSerializer):
     #label = ProjectFilteredPrimaryKeyRelatedField(queryset=Label.objects.all())
-    label = serializers.PrimaryKeyRelatedField(queryset=Label.objects.all())
-    document = serializers.PrimaryKeyRelatedField(queryset=Document.objects.all())
+    # label = serializers.PrimaryKeyRelatedField(queryset=Label.objects.all())
+    # document = serializers.PrimaryKeyRelatedField(queryset=Document.objects.all())
 
     class Meta:
         model = SequenceAnnotation
-        fields = ('id', 'prob', 'label', 'start_offset', 'end_offset', 'user', 'document')
+        fields = ('id', 'start_offset', 'end_offset','annotation_text')
         read_only_fields = ('user',)
 
 
 class Seq2seqAnnotationSerializer(serializers.ModelSerializer):
-    document = serializers.PrimaryKeyRelatedField(queryset=Document.objects.all())
+    # document = serializers.PrimaryKeyRelatedField(queryset=Document.objects.all())
 
     class Meta:
         model = Seq2seqAnnotation
-        fields = ('id', 'text', 'user', 'document', 'prob')
+        fields = ('id','text','sentence')
         read_only_fields = ('user',)
 
 class qaDatasetAnnotationSerializer(serializers.ModelSerializer):
-    document = serializers.PrimaryKeyRelatedField(queryset=Document.objects.all())
+    # document = serializers.PrimaryKeyRelatedField(queryset=Document.objects.all())
 
     class Meta:
         model = qaDatasetAnnotation
-        fields = ('id', 'question','answer','start_answer','end_answer', 'user', 'document')
-        read_only_fields = ('user',)
+        fields = ('id', 'question','answer','start_answer','end_answer')
+        # read_only_fields = ('user',)

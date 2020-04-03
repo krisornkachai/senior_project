@@ -76,6 +76,7 @@ export default {
 
   data() {
     return {
+      text_anno:'',
       pageNumber: 0,
       docs: [],
       annotations: [],

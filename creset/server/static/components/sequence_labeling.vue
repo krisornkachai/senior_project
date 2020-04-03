@@ -14,8 +14,8 @@ block annotation-area
                   color: label.text_color, \
                   backgroundColor: label.background_color \
                 }"
-                v-on:click="annotate(label.id)"
-                v-on:shortkey="annotate(label.id)"
+                v-on:click="annotate(label.id,label)"
+                v-on:shortkey="annotate(label.id,label)"
               ) {{ label.text }}
               span.tag.is-medium
                 kbd {{ shortcutKey(label) | simpleShortcut }}
@@ -53,8 +53,8 @@ export default {
   mixins: [annotationMixin],
 
   methods: {
-    annotate(labelId) {
-      this.$refs.annotator.addLabel(labelId);
+    annotate(labelId,label) {
+      this.$refs.annotator.addLabel(labelId,label);
     },
 
     addLabel(annotation) {

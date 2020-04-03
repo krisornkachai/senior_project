@@ -58,10 +58,11 @@ export default {
       if (!value) {
         return;
       }
-
+      // console.log('testtt'+this.docs[this.pageNumber].text);
       const docId = this.docs[this.pageNumber].id;
       const payload = {
         text: value,
+        sentence:this.docs[this.pageNumber].text,
       };
       HTTP.post(`docs/${docId}/annotations`, payload).then((response) => {
         this.annotations[this.pageNumber].push(response.data);
