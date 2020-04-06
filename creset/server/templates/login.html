@@ -7,11 +7,11 @@
     <div class="column is-4 is-offset-4">
       <div class="box has-text-left">
         {% if form.errors %}
-        <p>Your username and password didn't match. Please try again.</p>
+        <p>ซื้อผู้ใช้งานหรือรหัสไม่ถูกต้อง</p>
         {% endif %} {% if next %} {% if user.is_authenticated %}
-        <p>Your account doesn't have access to this page. To proceed, please login with an account that has access.</p>
+        <p>กรุณาเข้าสู่ระบบ</p>
         {% else %}
-        <p>Please login to see this page.</p>
+        <p>กรุณาเข้าสู่ระบบ</p>
         {% endif %} {% endif %}
 
         <form method="post" action="{% url 'login' %}">
