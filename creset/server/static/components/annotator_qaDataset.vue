@@ -42,6 +42,7 @@ export default {
     startOffset: 0,
     endOffset: 0,
     answer:'',
+    answer_forgen:'',
   }),
 
   computed: {
@@ -162,8 +163,12 @@ export default {
       this.startOffset = start;
       this.endOffset = end;
       this.answer=this.text.substring(parseInt(start, 10),parseInt(end, 10));
+
+      this.answer_forgen=this.text.substring(parseInt(start-20, 10),parseInt(end+20, 10));
        //this.answer=this.text.substring(parseInt(start, 10),parseInt(end, 10));
       console.log(start, end,this.text.substring(parseInt(start, 10),parseInt(end, 10))); // eslint-disable-line no-console
+      console.log(start-20, end+20,this.text.substring(parseInt(start-20, 10),parseInt(end+20, 10))); // eslint-disable-line no-console
+
     },
 
     validRange() {
@@ -213,6 +218,19 @@ export default {
         };
         //console.log('addLabel 204'+this.text)
         this.$emit('add-label', label);
+      }
+    },
+    addLabel_gen(labelId) {
+      if (this.validRange()) {
+        const label = {
+          start_offset: this.startOffset,
+          end_offset: this.endOffset,
+          answer:this.answer,//data that sent to qaDataset.vue
+          label: labelId,
+          answer_forgen:this.answer_forgen,
+        };
+        //console.log('addLabel 204'+this.text)
+        this.$emit('add-label-gen', label);
       }
     },
 

@@ -13,14 +13,20 @@ from rest_framework.parsers import MultiPartParser
 from rest_framework_csv.renderers import CSVRenderer
 
 from .filters import DocumentFilter
-from .models import Project, Label, Document
+from .models import Project, Label, Document,qaDatasetAnnotation
 from .permissions import IsAdminUserAndWriteOnly, IsProjectUser, IsOwnAnnotation
-from .serializers import ProjectSerializer, LabelSerializer, DocumentSerializer, UserSerializer
+from .serializers import ProjectSerializer, LabelSerializer, DocumentSerializer, UserSerializer,qaDatasetAnnotationSerializer
 from .serializers import ProjectPolymorphicSerializer
 from .utils import CSVParser, ExcelParser, JSONParser, PlainTextParser, CoNLLParser, iterable_to_io
 from .utils import JSONLRenderer
 from .utils import JSONPainter, CSVPainter
 from .utils_file import PlainTextParser as PlainTextParser_file
+from pythainlp.corpus.common import thai_words
+from pythainlp.tokenize import dict_trie
+from pythainlp.tag.named_entity import ThaiNameTagger
+from pythainlp import sent_tokenize, word_tokenize
+
+import random
 
 class Me(APIView):
     permission_classes = (IsAuthenticated,)
@@ -174,7 +180,86 @@ class AnnotationList(generics.ListCreateAPIView):
     pagination_class = None
     permission_classes = (IsAuthenticated, IsProjectUser)
     #permission_classes = (IsAuthenticated,)
+  
+    def post(self, request, *args, **kwargs):
+        print('annotationrequest -----------------------------------------------------')
+        print(request.data)
+        
 
+        text = 'ต่อจากนั้นเสด็จพระราชดำเนินไปทรงศึกษาที่โรงเรียนมิลฟิลด์ เมืองสตรีท แคว้นซอมเมอร์เซท เมื่อเดือนกันยายน พ.ศ. 2509'
+        word = 'พ.ศ. 2509'
+
+        print("sent_tokenize:", sent_tokenize(text))
+        sentence_cut = sent_tokenize(text)
+        word_cut = sent_tokenize(word)
+        print(int(len(sentence_cut)/2))
+        print(len(sentence_cut))
+        print(random.randint(int((len(sentence_cut)-1)/5),int((len(sentence_cut)-1)/1.3)))
+        rand_range_sent_start = random.randint(0,int((len(sentence_cut)-1)/2))
+        rand_range_sent_end = (random.randint(int((len(sentence_cut)-1)/2),int((len(sentence_cut)-1))))
+        print("rand_range_sent_start"+str(rand_range_sent_start))
+        print("rand_range_sent_end"+str(rand_range_sent_end))
+        print(sentence_cut[rand_range_sent_start:rand_range_sent_end])
+
+        ner = ThaiNameTagger()
+        name_tag = ner.get_ner(text)
+        word_tag = ner.get_ner(word)
+        all_tag = ['O', 'B-PERSON', 'I-PERSON', 'B-DATE', 'I-DATE', 'B-LOCATION', 'I-LOCATION', 'B-TIME', 'I-TIME', 'B-LAW', 'I-LAW', 'B-ORGANIZATION', 'I-ORGANIZATION']
+        print('wordtag'+word_tag[0][2])
+        for i in name_tag:
+            if i[2] not in all_tag :
+                all_tag.append(i[2])
+            if(i[2] != 'O'):
+                print(i)
+        print(all_tag)
+
+        print('------------------------------------------------------------------------')
+        question = []
+        if(word_tag[0][2]=="O"):
+            question.append('เพราะอะไร')
+        elif(word_tag[0][2]=="B-PERSON"):
+            question.append('ใครที่')
+        elif(word_tag[0][2]=="I-PERSON"):
+            question.append('ใครที่')
+        elif(word_tag[0][2]=="B-DATE"):
+            question.append('วันใดที่')
+        elif(word_tag[0][2]=="I-DATE"):
+            question.append('วันใดที่')
+        elif(word_tag[0][2]=="B-LOCATION"):
+            question.append('สถาณที่ใดที่')
+        elif(word_tag[0][2]=="I-LOCATION"):
+            question.append('สถาณที่ใดที่')
+        elif(word_tag[0][2]=="B-TIME"):
+            question.append('เวลาใดที่')
+        elif(word_tag[0][2]=="I-TIME"):
+            question.append('เวลาใดที่')
+        elif(word_tag[0][2]=="B-LAW"):
+            question.append('คืออะไร')
+        elif(word_tag[0][2]=="I-LAW"):
+            question.append('คืออะไร')
+        elif(word_tag[0][2]=="B-ORGANIZATION"):
+            question.append('สถาณที่ใดที่')
+        elif(word_tag[0][2]=="I-ORGANIZATION"):
+            question.append('สถาณที่ใดที่')
+
+
+
+        for i in (sentence_cut[rand_range_sent_start:rand_range_sent_end]):
+            question.append(i)
+
+        rand_question = ''
+        for i in question:
+            rand_question = rand_question+i
+        print('question is -->',rand_question)
+
+
+        
+        request.data['answer'] = request.data['answer'] + 'can add str' 
+        # {'question': '11111111111111111111', 'answer': 'ทีมตน', 'start_answer': 573, 'end_answer': 578}
+        return self.create(request, *args, **kwargs)
+        
+
+    
     def get_serializer_class(self):
         project = get_object_or_404(Project, pk=self.kwargs['project_id'])
         self.serializer_class = project.get_annotation_serializer()

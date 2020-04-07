@@ -17,11 +17,12 @@ block annotation-area
           v-bind:text="docs[pageNumber].text"
           v-on:remove-label="removeLabel"
           v-on:add-label="addLabel"
+          v-on:add-label-gen="addLabel_gen"
           ref="annotator"
         )
 
   a.button.is-medium.is-primary(v-on:click="annotate()") add data
-
+  a.button.is-medium.is-danger(v-on:click="annotate_gen()") add data gen question
 
   section.todoapp
     header.header
@@ -128,6 +129,10 @@ export default {
       //console.log(labelId)
       this.$refs.annotator.addLabel();
     },
+    annotate_gen() {
+      console.log('addlabel gen')
+      this.$refs.annotator.addLabel_gen();
+    },
 
     addLabel(annotation) {
       const docId = this.docs[this.pageNumber].id;
@@ -141,6 +146,24 @@ export default {
      
       const payload = {
         question: value,
+        answer: annotation.answer,
+        start_answer: annotation.start_offset,
+        end_answer: annotation.end_offset
+      };
+      HTTP.post(`docs/${docId}/annotations`, payload).then((response) => {
+        this.annotations[this.pageNumber].push(response.data);
+      });
+
+      this.newTodo = '';
+
+    },
+     addLabel_gen(annotation) {
+      const docId = this.docs[this.pageNumber].id;
+      console.log(annotation.start_offset);
+      console.log(annotation.answer);
+      console.log('addlabel_gen')
+      const payload = {
+        question: annotation.answer_forgen,
         answer: annotation.answer,
         start_answer: annotation.start_offset,
         end_answer: annotation.end_offset

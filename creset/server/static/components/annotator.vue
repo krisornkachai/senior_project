@@ -162,6 +162,8 @@ export default {
       this.endOffset = end;
       
       console.log(start, end,this.text_anno); // eslint-disable-line no-console
+      console.log(start-20, end+20,this.text.substring(parseInt(start-20, 10),parseInt(end+20, 10))); // eslint-disable-line no-console
+
     },
 
     validRange() {
