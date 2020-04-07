@@ -168,7 +168,7 @@ export default {
         start_answer: annotation.start_offset,
         end_answer: annotation.end_offset
       };
-      HTTP.post(`docs/${docId}/annotations`, payload).then((response) => {
+      HTTP.post(`docs/${docId}/annotations_forgen_qa`, payload).then((response) => {
         this.annotations[this.pageNumber].push(response.data);
       });
 

@@ -175,8 +175,41 @@ class DocumentDetail(generics.RetrieveUpdateDestroyAPIView):
     #permission_classes = (IsAuthenticated, IsProjectUser, IsAdminUserAndWriteOnly)
     permission_classes = (IsAuthenticated, IsAdminUserAndWriteOnly)
 
-
 class AnnotationList(generics.ListCreateAPIView):
+    pagination_class = None
+    permission_classes = (IsAuthenticated, IsProjectUser)
+    #permission_classes = (IsAuthenticated,)
+  
+    def post(self, request, *args, **kwargs):
+        # {'question': '11111111111111111111', 'answer': 'ทีมตน', 'start_answer': 573, 'end_answer': 578}
+        return self.create(request, *args, **kwargs)
+        
+
+    
+    def get_serializer_class(self):
+        project = get_object_or_404(Project, pk=self.kwargs['project_id'])
+        self.serializer_class = project.get_annotation_serializer()
+        return self.serializer_class
+
+    def get_queryset(self):
+        project = get_object_or_404(Project, pk=self.kwargs['project_id'])
+        model = project.get_annotation_class()
+
+        queryset = model.objects.filter(document=self.kwargs['doc_id'])
+        if not project.collaborative_annotation:
+            queryset = queryset.filter(user=self.request.user)
+
+        return queryset
+
+    def create(self, request, *args, **kwargs):
+        request.data['document'] = self.kwargs['doc_id']
+        return super().create(request, args, kwargs)
+
+    def perform_create(self, serializer):
+        doc = get_object_or_404(Document, pk=self.kwargs['doc_id'])
+        serializer.save(document=doc, user=self.request.user)
+
+class AnnotationList_forgen_qa(generics.ListCreateAPIView):
     pagination_class = None
     permission_classes = (IsAuthenticated, IsProjectUser)
     #permission_classes = (IsAuthenticated,)
@@ -186,9 +219,10 @@ class AnnotationList(generics.ListCreateAPIView):
         print(request.data)
         
 
-        text = 'ต่อจากนั้นเสด็จพระราชดำเนินไปทรงศึกษาที่โรงเรียนมิลฟิลด์ เมืองสตรีท แคว้นซอมเมอร์เซท เมื่อเดือนกันยายน พ.ศ. 2509'
-        word = 'พ.ศ. 2509'
-
+        # text = 'ต่อจากนั้นเสด็จพระราชดำเนินไปทรงศึกษาที่โรงเรียนมิลฟิลด์ เมืองสตรีท แคว้นซอมเมอร์เซท เมื่อเดือนกันยายน พ.ศ. 2509'
+        # word = 'พ.ศ. 2509'
+        text = request.data['question']
+        word = request.data['answer']
         print("sent_tokenize:", sent_tokenize(text))
         sentence_cut = sent_tokenize(text)
         word_cut = sent_tokenize(word)
@@ -254,7 +288,7 @@ class AnnotationList(generics.ListCreateAPIView):
 
 
         
-        request.data['answer'] = request.data['answer'] + 'can add str' 
+        request.data['question'] = rand_question 
         # {'question': '11111111111111111111', 'answer': 'ทีมตน', 'start_answer': 573, 'end_answer': 578}
         return self.create(request, *args, **kwargs)
         

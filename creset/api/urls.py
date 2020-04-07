@@ -6,7 +6,7 @@ from .views import Me, Features
 from .views import ProjectList, ProjectDetail
 from .views import LabelList, LabelDetail, ApproveLabelsAPI,addTeamProject
 from .views import DocumentList, DocumentDetail
-from .views import AnnotationList, AnnotationDetail
+from .views import AnnotationList, AnnotationDetail,AnnotationList_forgen_qa
 from .views import TextUploadAPI, TextDownloadAPI, CloudUploadAPI,TextUploadAPI_file
 from .views import StatisticsAPI
 
@@ -33,6 +33,10 @@ urlpatterns = [
          ApproveLabelsAPI.as_view(), name='approve_labels'),
     path('projects/<int:project_id>/docs/<int:doc_id>/annotations',
          AnnotationList.as_view(), name='annotation_list'),
+
+    path('projects/<int:project_id>/docs/<int:doc_id>/annotations_forgen_qa',
+         AnnotationList_forgen_qa.as_view(), name='annotation_list_forgen_qa'),
+
     path('projects/<int:project_id>/docs/<int:doc_id>/annotations/<int:annotation_id>',
          AnnotationDetail.as_view(), name='annotation_detail'),
     path('projects/<int:project_id>/docs/upload',
