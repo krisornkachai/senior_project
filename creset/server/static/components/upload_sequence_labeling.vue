@@ -2,15 +2,7 @@
 extends ./upload.pug
 
 block select-format-area
-  label.radio
-    input(
-      type="radio"
-      name="format"
-      value="conll"
-      v-bind:checked="format == 'conll'"
-      v-model="format"
-    )
-    | CoNLL
+
 
   label.radio
     input(
@@ -28,10 +20,7 @@ block example-format-area
       include ./examples/upload_sequence_labeling.txt
       | ...
 
-  pre.code-block(v-show="format == 'conll'")
-    code.plaintext
-      include ./examples/upload_sequence_labeling.conll
-      | ...
+
 
   pre.code-block(v-show="format == 'json'")
     code.json

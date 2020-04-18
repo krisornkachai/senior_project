@@ -2,15 +2,7 @@
 extends ./upload.pug
 
 block select-format-area
-  label.radio
-    input(
-      type="radio"
-      name="format"
-      value="csv"
-      v-bind:checked="format == 'csv'"
-      v-model="format"
-    )
-    | CSV
+  
 
   label.radio
     input(
@@ -22,15 +14,7 @@ block select-format-area
     )
     | JSONL
 
-  label.radio
-    input(
-      type="radio"
-      name="format"
-      value="excel"
-      v-bind:checked="format === 'excel'"
-      v-model="format"
-    )
-    | Excel
+
 
 block example-format-area
   pre.code-block(v-show="format == 'plain'")
@@ -38,10 +22,7 @@ block example-format-area
       include ./examples/upload_text_classification.txt
       | ...
 
-  pre.code-block(v-show="format == 'csv'")
-    code.csv
-      include ./examples/upload_text_classification.csv
-      | ...
+ 
 
   pre.code-block(v-show="format == 'json'")
     code.json

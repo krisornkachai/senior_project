@@ -2,7 +2,7 @@
 {% load widget_tweaks %}
 {% block content %}
 
-<section class="hero container has-text-centered">
+<section class="hero container has-text-weight-medium is-halfheight">
   <div class="columns hero-body">
     <div class="column is-4 is-offset-4">
       <div class="box has-text-left">
@@ -20,12 +20,8 @@
             <label class="label">Username</label>
             <div class="control has-icons-left has-icons-right">
               {{ form.username|add_class:"input" }}
-              <span class="icon is-small is-left">
-                <i class="fas fa-user"></i>
-              </span>
-              <span class="icon is-small is-right">
-                <i class="fas fa-check"></i>
-              </span>
+              
+           
             </div>
           </div>
 
@@ -33,44 +29,25 @@
             <label class="label">Password</label>
             <div class="control has-icons-left has-icons-right">
               {{ form.password|add_class:"input"}}
-              <span class="icon is-small is-left">
-                <i class="fas fa-lock"></i>
-              </span>
-              <span class="icon is-small is-right">
-                <i class="fas fa-check"></i>
+
               </span>
             </div>
           </div>
           <div class="field">
-            <label class="checkbox">
-              <input type="checkbox"> Remember me
-            </label>
+        
           </div>
-          <input class="button is-block is-primary is-middle is-fullwidth" type="submit" value="Login" />
+          <input class="button is-block is-success is-middle is-fullwidth" type="submit" value="Login" />
           {% if allow_signup %}
           <div class="field">
-            <span class="checkbox" style="margin-top:10px">
-              Not registered yet ? <a href="{% url 'signup' %}"> Sign up </a>
+            <span class="checkbox" style="margin-top:15px">
+              would you like to  <a href="{% url 'signup' %}"> Sign up </a>
             </span>
           </div>
           {% endif %}
           <input type="hidden" name="next" value="{{ next }}" />
         </form>
-        {% if social_login_enabled %}
-        <div class="is-divider" data-content="OR"></div>
-        {% endif %}
-        {% if github_login %}
-        <a href="{% url 'social:begin' 'github' %}" class="button is-fullwidth mb10">
-          <span class="icon"><i class="fab fa-github"></i></span>
-          <span>Login with Github</span>
-        </a>
-        {% endif %}
-        {% if aad_login %}
-        <a href="{% url 'social:begin' 'azuread-tenant-oauth2' %}" class="button is-fullwidth mb10">
-          <span class="icon"><i class="fab fa-microsoft"></i></span>
-          <span>Login with Active Directory</span>
-        </a>
-        {% endif %}
+     
+
       </div>
     </div>
   </div>

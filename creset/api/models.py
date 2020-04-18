@@ -65,7 +65,7 @@ class TextClassificationProject(Project):
 
     @property
     def image(self):
-        return staticfiles_storage.url('assets/images/cats/logo.png')
+        return staticfiles_storage.url('assets/images/logo_project/doccument_classification.png')
 
     def get_bundle_name(self):
         return 'document_classification'
@@ -92,7 +92,7 @@ class SequenceLabelingProject(Project):
 
     @property
     def image(self):
-        return staticfiles_storage.url('assets/images/cats/logo.png')
+        return staticfiles_storage.url('assets/images/logo_project/wold_tagging.png')
 
     def get_bundle_name(self):
         return 'sequence_labeling'
@@ -119,7 +119,7 @@ class Seq2seqProject(Project):
 
     @property
     def image(self):
-        return staticfiles_storage.url('assets/images/cats/logo.png')
+        return staticfiles_storage.url('assets/images/logo_project/sentence_classification.png')
 
     def get_bundle_name(self):
         return 'seq2seq'
@@ -145,7 +145,7 @@ class qaDatasetProject(Project):
 
     @property
     def image(self):
-        return staticfiles_storage.url('assets/images/cats/logo.png')
+        return staticfiles_storage.url('assets/images/logo_project/question_dataset.png')
 
     def get_bundle_name(self):
         return 'qaDataset'

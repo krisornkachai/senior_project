@@ -1,17 +1,16 @@
 <template lang="pug">
   div(v-cloak="")
+    //- section.hero.project-image
+    //-   div.container
+    //-     div.columns
+    //-       div.column.is-10.is-offset-1
+    //-         p(v-if="isSuperuser")
+    //-           a.button.is-medium.is-primary(v-on:click="isActive = !isActive") Create Project
     section.hero.project-image
-      div.container
-        div.columns
+        div.container
           div.column.is-10.is-offset-1
-
-            
-          
-
-
-
             p(v-if="isSuperuser")
-              a.button.is-medium.is-primary(v-on:click="isActive = !isActive") Create Project
+              a.button.is-medium.is-info(v-on:click="isActive = !isActive") Create Project
 
     div.modal(v-bind:class="{ 'is-active': isActive }")
       div.modal-background
@@ -39,10 +38,10 @@
             div.control
               select(v-model="projectType", name="project_type", required)
                 option(value="", selected="selected") ---------
+                option(value="SequenceLabeling") word tagging
+                option(value="Seq2seq") sentence classification
                 option(value="DocumentClassification") document classification
-                option(value="SequenceLabeling") sentense labeling
-                option(value="Seq2seq") question labeling
-                option(value="qaDataset") create qa dataset
+                option(value="qaDataset") question dataset
             p.help.is-danger {{ projectTypeError }}
 
        
@@ -72,12 +71,7 @@
 
                 div.field.card-header-icon
                   div.control
-                    div.select
-                      select(v-model="selected")
-                        option(selected) All Project
-                        option Text Classification
-                        option Sequence Labeling
-                        option Seq2seq
+            
 
               div.card-table
                 div.content
@@ -103,13 +97,19 @@
                                 span {{ project.updated_at | daysAgo }}
 
                         td.is-vertical
-                          span.tag.is-normal {{ project.project_type }}
-
+                          p(v-if="project.project_type =='SequenceLabeling'")
+                            span.tag.is-normal {{ 'wold tagging' }}
+                          p(v-if="project.project_type =='Seq2seq'")
+                            span.tag.is-normal {{ 'sentence classification' }}
+                          p(v-if="project.project_type =='DocumentClassification'")
+                            span.tag.is-normal {{ 'document classification' }}
+                          p(v-if="project.project_type =='qaDataset'")
+                            span.tag.is-normal {{ 'question dataset' }}                            
                         td.is-vertical(v-if="isSuperuser")
                           a(v-bind:href="'/projects/' + project.id + '/docs'") manage project
 
                         td.is-vertical(v-if="isSuperuser")
-                          a.has-text-danger(v-on:click="setProject(project)") Delete
+                          a.button.is-medium.is-danger(v-on:click="setProject(project)") Delete
 </template>
 
 <script>
@@ -128,6 +128,8 @@ export default {
     projectName: '',
     description: '',
     projectType: '',
+    projectType: '',
+    projectType_name: '',
     descriptionError: '',
     projectTypeError: '',
     projectNameError: '',
