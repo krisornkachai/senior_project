@@ -41,7 +41,9 @@ block annotation-area
           v-bind:class="{ editing: todo == editedTodo }"
         )
           div.view
-            label(v-on:dblclick="editTodo(todo)") {{ todo.question }}
+            label(v-on:dblclick="editTodo(todo)") คำถาม){{ todo.question }}
+            button.delete.destroy.is-large(v-on:click="removeTodo(todo)")
+            label(v-on:dblclick="editTodo(todo)") คำตอบ){{ todo.answer }}
             button.delete.destroy.is-large(v-on:click="removeTodo(todo)")
 
           input.textarea.edit(
