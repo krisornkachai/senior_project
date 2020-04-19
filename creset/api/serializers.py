@@ -172,7 +172,7 @@ class Seq2seqAnnotationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Seq2seqAnnotation
-        fields = ('id','text','sentence')
+        fields = ('id','text')
         read_only_fields = ('user',)
 
 class qaDatasetAnnotationSerializer(serializers.ModelSerializer):

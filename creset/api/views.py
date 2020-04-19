@@ -229,8 +229,8 @@ class AnnotationList_forgen_qa(generics.ListCreateAPIView):
         print(int(len(sentence_cut)/2))
         print(len(sentence_cut))
         print(random.randint(int((len(sentence_cut)-1)/5),int((len(sentence_cut)-1)/1.3)))
-        rand_range_sent_start = random.randint(0,int((len(sentence_cut)-1)/2))
-        rand_range_sent_end = (random.randint(int((len(sentence_cut)-1)/2),int((len(sentence_cut)-1))))
+        rand_range_sent_start = random.randint(0,int((len(sentence_cut)-1)/4))
+        rand_range_sent_end = (random.randint(int((len(sentence_cut)-1)/4*3),int((len(sentence_cut)-1))))
         print("rand_range_sent_start"+str(rand_range_sent_start))
         print("rand_range_sent_end"+str(rand_range_sent_end))
         print(sentence_cut[rand_range_sent_start:rand_range_sent_end])
@@ -250,7 +250,7 @@ class AnnotationList_forgen_qa(generics.ListCreateAPIView):
         print('------------------------------------------------------------------------')
         question = []
         if(word_tag[0][2]=="O"):
-            question.append('เพราะอะไร')
+            question.append('ทำไม')
         elif(word_tag[0][2]=="B-PERSON"):
             question.append('ใครที่')
         elif(word_tag[0][2]=="I-PERSON"):

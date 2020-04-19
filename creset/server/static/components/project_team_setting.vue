@@ -17,7 +17,7 @@
       div.modal-background
       div.modal-card
         header.modal-card-head
-          p.modal-card-title Create Project
+          p.modal-card-title add team project
           button.delete(aria-label="close", v-on:click="isActive = !isActive")
 
         section.modal-card-body

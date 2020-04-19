@@ -20,9 +20,9 @@ block annotation-area
           v-on:add-label-gen="addLabel_gen"
           ref="annotator"
         )
-
-  a.button.is-medium.is-primary(v-on:click="annotate()") add data
-  a.button.is-medium.is-danger(v-on:click="annotate_gen()") add data gen question
+  a.button.is-medium.is-warning(v-on:click="isActive = !isActive") switch mode
+  a(v-if="!isActive").button.is-medium.is-primary(v-on:click="annotate()") manual add question
+  a(v-if="isActive").button.is-medium.is-danger(v-on:click="annotate_gen()") auto add question
 
   section.todoapp
     header.header
@@ -41,7 +41,9 @@ block annotation-area
           v-bind:class="{ editing: todo == editedTodo }"
         )
           div.view
-            label(v-on:dblclick="editTodo(todo)") {{ todo.question }}
+            label(v-on:dblclick="editTodo(todo)") คำถาม){{ todo.question }}
+            button.delete.destroy.is-large(v-on:click="removeTodo(todo)")
+            label(v-on:dblclick="editTodo(todo)") คำตอบ){{ todo.answer }}
             button.delete.destroy.is-large(v-on:click="removeTodo(todo)")
 
           input.textarea.edit(
@@ -70,6 +72,8 @@ export default {
   data: () => ({
     newTodo: '',
     editedTodo: null,
+    isActive: false,
+
   }),
 
   methods: {

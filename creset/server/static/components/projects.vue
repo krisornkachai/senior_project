@@ -18,6 +18,7 @@
         header.modal-card-head
           p.modal-card-title Create Project
           button.delete(aria-label="close", v-on:click="isActive = !isActive")
+          
 
         section.modal-card-body
           div.field
@@ -44,6 +45,16 @@
                 option(value="qaDataset") question dataset
             p.help.is-danger {{ projectTypeError }}
 
+          div.field
+            label.checkbox
+              input(
+                v-model="collaborativeAnnotation"
+                name="collaborative_annotation"
+                type="checkbox"
+                style="margin-right: 0.25em;"
+                required
+              )
+              | Share Project
        
 
         footer.modal-card-foot.pt20.pb20.pr20.pl20.has-background-white-ter
@@ -60,14 +71,14 @@
         footer.modal-card-foot.pt20.pb20.pr20.pl20.has-background-white-ter
           button.button.is-danger(v-on:click="deleteProject()") Delete
           button.button(v-on:click="isDelete = !isDelete") Cancel
-
     section.hero
       div.container
         div.columns
           div.column.is-10.is-offset-1
             div.card.events-card
               header.card-header
-                p.card-header-title {{ items.length }} Projects
+                p.card-header-title {{ items.length }} Projects  [username : {{username}}][userid : {{user_id}}]
+                
 
                 div.field.card-header-icon
                   div.control
@@ -89,7 +100,7 @@
                             div.dataset-item__main-title
                               div.dataset-item__main-title-link.dataset-item__link
                                 a.has-text-black(v-bind:href="'/projects/' + project.id")
-                                  | {{ project.name }}
+                                  | {{ project.name }} [project_id {{ project.id }}]
 
                             div.dataset-item__main-subtitle {{ project.description }}
                             div.dataset-item__main-info
@@ -137,6 +148,7 @@ export default {
     isSuperuser: false,
     randomizeDocumentOrder: false,
     collaborativeAnnotation: false,
+    user_id:'',
   }),
 
   computed: {
@@ -153,6 +165,7 @@ export default {
       this.items = projects.data;
       this.username = me.data.username;
       this.isSuperuser = me.data.is_superuser;
+      this.user_id = me.data.id;
     });
   },
 
