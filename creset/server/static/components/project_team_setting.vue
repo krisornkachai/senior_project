@@ -28,7 +28,7 @@
             p.help.is-danger {{ projectNameError }}
 
           div.field
-            label.label user id
+            label.label User id
             div.control
               input.input(v-model="user_id", required, placeholder="user id for add team project")
             p.help.is-danger {{ descriptionError }}

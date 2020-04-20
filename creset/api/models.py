@@ -145,7 +145,7 @@ class qaDatasetProject(Project):
 
     @property
     def image(self):
-        return staticfiles_storage.url('assets/images/logo_project/question_dataset.png')
+        return staticfiles_storage.url('assets/images/logo_project/question_answering_dataset.png')
 
     def get_bundle_name(self):
         return 'qaDataset'
@@ -266,7 +266,7 @@ class Seq2seqAnnotation(Annotation):
     sentence = models.CharField(max_length=5000,default='none')
 
     document = models.ForeignKey(Document, related_name='seq2seq_annotations', on_delete=models.CASCADE)
-    text = models.CharField(max_length=500)
+    text = models.CharField(max_length=500,default = None)
 
     class Meta:
         unique_together = ('document', 'user', 'text','sentence')

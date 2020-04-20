@@ -42,7 +42,7 @@
                 option(value="SequenceLabeling") word tagging
                 option(value="Seq2seq") sentence classification
                 option(value="DocumentClassification") document classification
-                option(value="qaDataset") question dataset
+                option(value="qaDataset") question answering dataset
             p.help.is-danger {{ projectTypeError }}
 
           div.field
@@ -115,7 +115,7 @@
                           p(v-if="project.project_type =='DocumentClassification'")
                             span.tag.is-normal {{ 'document classification' }}
                           p(v-if="project.project_type =='qaDataset'")
-                            span.tag.is-normal {{ 'question dataset' }}                            
+                            span.tag.is-normal {{ 'question answering dataset' }}                            
                         td.is-vertical(v-if="isSuperuser")
                           a(v-bind:href="'/projects/' + project.id + '/docs'") manage project
 
