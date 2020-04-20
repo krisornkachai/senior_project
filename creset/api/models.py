@@ -261,15 +261,13 @@ class SequenceAnnotation(Annotation):
 
 
 class Seq2seqAnnotation(Annotation):
-    # Override AnnotationManager for custom functionality
-    objects = Seq2seqAnnotationManager()
-    sentence = models.CharField(max_length=5000,default='none')
-
     document = models.ForeignKey(Document, related_name='seq2seq_annotations', on_delete=models.CASCADE)
-    text = models.CharField(max_length=500,default = None)
+    label = models.ForeignKey(Label, on_delete=models.CASCADE)
+    annotation_text = models.CharField(max_length=500)
+    
 
     class Meta:
-        unique_together = ('document', 'user', 'text','sentence')
+        unique_together = ('document', 'user', 'label','annotation_text')
 
 class qaDatasetAnnotation(Annotation):
     # Override AnnotationManager for custom functionality

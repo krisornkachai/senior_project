@@ -79,7 +79,7 @@ export default {
 
       window.setTimeout( function(){  //acting like this is an Ajax call
         
-        window.alert('upload file '+this.i);
+        window.alert('upload file finish');
         HTTP.post('docs/upload',
           formData,
           {

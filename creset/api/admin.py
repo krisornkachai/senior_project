@@ -36,7 +36,7 @@ class DocumentAnnotationAdmin(admin.ModelAdmin):
 
 
 class Seq2seqAnnotationAdmin(admin.ModelAdmin):
-    list_display = ('document', 'text', 'user')
+    list_display = ('document', 'label', 'user')
     ordering = ('document',)
     search_fields = ('document',)
 

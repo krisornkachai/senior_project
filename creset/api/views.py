@@ -25,8 +25,9 @@ from pythainlp.corpus.common import thai_words
 from pythainlp.tokenize import dict_trie
 from pythainlp.tag.named_entity import ThaiNameTagger
 from pythainlp import sent_tokenize, word_tokenize
-
+from pythainlp.summarize import summarize
 import random
+import math
 
 class Me(APIView):
     permission_classes = (IsAuthenticated,)
@@ -223,46 +224,33 @@ class AnnotationList_forgen_qa(generics.ListCreateAPIView):
         # word = 'พ.ศ. 2509'
         text = request.data['question']
         word = request.data['answer']
-        print("sent_tokenize:", sent_tokenize(text))
-        sentence_cut = sent_tokenize(text)
-        word_cut = sent_tokenize(word)
-        print(int(len(sentence_cut)/2))
-        print(len(sentence_cut))
-        print(random.randint(int((len(sentence_cut)-1)/5),int((len(sentence_cut)-1)/1.3)))
+        text = text.replace(word,'')
+
+        sentence_cut = word_tokenize(text, engine="newmm")
+        word_cut = word_tokenize(word, engine="newmm")
         rand_range_sent_start = random.randint(0,int((len(sentence_cut)-1)/4))
-        rand_range_sent_end = (random.randint(int((len(sentence_cut)-1)/4*3),int((len(sentence_cut)-1))))
-        print("rand_range_sent_start"+str(rand_range_sent_start))
-        print("rand_range_sent_end"+str(rand_range_sent_end))
-        print(sentence_cut[rand_range_sent_start:rand_range_sent_end])
-
+        rand_range_sent_end = (random.randint(int((len(sentence_cut)-1)/1.35),int((len(sentence_cut)-1))))
+        print(sentence_cut)
+        print('rand_range_sent_start'+str(rand_range_sent_start))
+        print('rand_range_sent_end'+str(rand_range_sent_end))
         ner = ThaiNameTagger()
-        name_tag = ner.get_ner(text)
         word_tag = ner.get_ner(word)
-        all_tag = ['O', 'B-PERSON', 'I-PERSON', 'B-DATE', 'I-DATE', 'B-LOCATION', 'I-LOCATION', 'B-TIME', 'I-TIME', 'B-LAW', 'I-LAW', 'B-ORGANIZATION', 'I-ORGANIZATION']
-        print('wordtag'+word_tag[0][2])
-        for i in name_tag:
-            if i[2] not in all_tag :
-                all_tag.append(i[2])
-            if(i[2] != 'O'):
-                print(i)
-        print(all_tag)
-
-        print('------------------------------------------------------------------------')
         question = []
         if(word_tag[0][2]=="O"):
-            question.append('ทำไม')
+            question.append('')
+            # question.append('เพราะอะไร')
         elif(word_tag[0][2]=="B-PERSON"):
             question.append('ใครที่')
         elif(word_tag[0][2]=="I-PERSON"):
-            question.append('ใครที่')
+            question.append('คนไหนที่')
         elif(word_tag[0][2]=="B-DATE"):
             question.append('วันใดที่')
         elif(word_tag[0][2]=="I-DATE"):
-            question.append('วันใดที่')
+            question.append('เมื่อใดที่')
         elif(word_tag[0][2]=="B-LOCATION"):
-            question.append('สถาณที่ใดที่')
+            question.append('ที่ใดที่')
         elif(word_tag[0][2]=="I-LOCATION"):
-            question.append('สถาณที่ใดที่')
+            question.append('ที่ใดที่')
         elif(word_tag[0][2]=="B-TIME"):
             question.append('เวลาใดที่')
         elif(word_tag[0][2]=="I-TIME"):
@@ -272,20 +260,97 @@ class AnnotationList_forgen_qa(generics.ListCreateAPIView):
         elif(word_tag[0][2]=="I-LAW"):
             question.append('คืออะไร')
         elif(word_tag[0][2]=="B-ORGANIZATION"):
-            question.append('สถาณที่ใดที่')
+            question.append('ที่ใดที่')
         elif(word_tag[0][2]=="I-ORGANIZATION"):
-            question.append('สถาณที่ใดที่')
-
-
-
+            question.append('ที่ใดที่')
         for i in (sentence_cut[rand_range_sent_start:rand_range_sent_end]):
             question.append(i)
-
+        if(word_tag[0][2]=="O"):
+            question.append('อะไร')
         rand_question = ''
-        for i in question:
-            rand_question = rand_question+i
+        if(len(summarize(text, n=2)) <= 1):
+            print('simple gen')
+            for i in question:
+                rand_question = rand_question+i
+        else:
+            print('before text sumarize',text)
+            text = summarize(text, n=2)
+            print('text sumarize',text)
+            text_temp = ''+question[0]
+            for i in text :
+                text_temp =text_temp + i
+            rand_question =text_temp
+        if(word_tag[0][2]=="O"):
+            print('setgen because O word')
+            rand_question=''
+            # math.ceil(int((len(sentence_cut))/2.0))
+            for i in (sentence_cut[:int(math.ceil(float((len(sentence_cut))/2.0)))+1]):
+                rand_question = rand_question + i
+            rand_question=rand_question+ 'อะไร'
         print('question is -->',rand_question)
+        # print("sent_tokenize:", sent_tokenize(text))
+        # sentence_cut = sent_tokenize(text)
+        # word_cut = sent_tokenize(word)
+        # print(int(len(sentence_cut)/2))
+        # print(len(sentence_cut))
+        # print(random.randint(int((len(sentence_cut)-1)/5),int((len(sentence_cut)-1)/1.3)))
+        # rand_range_sent_start = random.randint(0,int((len(sentence_cut)-1)/4))
+        # rand_range_sent_end = (random.randint(int((len(sentence_cut)-1)/4*3),int((len(sentence_cut)-1))))
+        # print("rand_range_sent_start"+str(rand_range_sent_start))
+        # print("rand_range_sent_end"+str(rand_range_sent_end))
+        # print(sentence_cut[rand_range_sent_start:rand_range_sent_end])
 
+        # ner = ThaiNameTagger()
+        # name_tag = ner.get_ner(text)
+        # word_tag = ner.get_ner(word)
+        # all_tag = ['O', 'B-PERSON', 'I-PERSON', 'B-DATE', 'I-DATE', 'B-LOCATION', 'I-LOCATION', 'B-TIME', 'I-TIME', 'B-LAW', 'I-LAW', 'B-ORGANIZATION', 'I-ORGANIZATION']
+        # print('wordtag'+word_tag[0][2])
+        # for i in name_tag:
+        #     if i[2] not in all_tag :
+        #         all_tag.append(i[2])
+        #     if(i[2] != 'O'):
+        #         print(i)
+        # print(all_tag)
+
+        # print('------------------------------------------------------------------------')
+        # question = []
+        # if(word_tag[0][2]=="O"):
+        #     question.append('ทำไม')
+        # elif(word_tag[0][2]=="B-PERSON"):
+        #     question.append('ใครที่')
+        # elif(word_tag[0][2]=="I-PERSON"):
+        #     question.append('ใครที่')
+        # elif(word_tag[0][2]=="B-DATE"):
+        #     question.append('วันใดที่')
+        # elif(word_tag[0][2]=="I-DATE"):
+        #     question.append('วันใดที่')
+        # elif(word_tag[0][2]=="B-LOCATION"):
+        #     question.append('สถาณที่ใดที่')
+        # elif(word_tag[0][2]=="I-LOCATION"):
+        #     question.append('สถาณที่ใดที่')
+        # elif(word_tag[0][2]=="B-TIME"):
+        #     question.append('เวลาใดที่')
+        # elif(word_tag[0][2]=="I-TIME"):
+        #     question.append('เวลาใดที่')
+        # elif(word_tag[0][2]=="B-LAW"):
+        #     question.append('คืออะไร')
+        # elif(word_tag[0][2]=="I-LAW"):
+        #     question.append('คืออะไร')
+        # elif(word_tag[0][2]=="B-ORGANIZATION"):
+        #     question.append('สถาณที่ใดที่')
+        # elif(word_tag[0][2]=="I-ORGANIZATION"):
+        #     question.append('สถาณที่ใดที่')
+
+
+
+        # for i in (sentence_cut[rand_range_sent_start:rand_range_sent_end]):
+        #     question.append(i)
+
+        # rand_question = ''
+        # for i in question:
+        #     rand_question = rand_question+i
+        # print('question is -->',rand_question)
+        # rand_question = rand_question.replace(word,'')
 
         
         request.data['question'] = rand_question 

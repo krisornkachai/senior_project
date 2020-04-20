@@ -169,11 +169,16 @@ class SequenceAnnotationSerializer(serializers.ModelSerializer):
 
 class Seq2seqAnnotationSerializer(serializers.ModelSerializer):
     # document = serializers.PrimaryKeyRelatedField(queryset=Document.objects.all())
-
     class Meta:
         model = Seq2seqAnnotation
-        fields = ('id','text','sentence')
-        read_only_fields = ('user',)
+        # fields = ('id', 'label', 'user','label_id','annotation_text')
+        fields = ('id','annotation_text','label')
+        read_only_fields = ('user', )
+
+    # class Meta:
+    #     model = Seq2seqAnnotation
+    #     fields = ('id','text','sentence')
+    #     read_only_fields = ('user',)
 
 class qaDatasetAnnotationSerializer(serializers.ModelSerializer):
     # document = serializers.PrimaryKeyRelatedField(queryset=Document.objects.all())

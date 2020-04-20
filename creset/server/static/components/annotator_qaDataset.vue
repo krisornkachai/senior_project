@@ -164,11 +164,12 @@ export default {
       this.endOffset = end;
       this.answer=this.text.substring(parseInt(start, 10),parseInt(end, 10));
 
-      this.answer_forgen=this.text.substring(parseInt(start-40, 10),parseInt(end+40, 10));
+      this.answer_forgen=this.text.substring(parseInt(start-60, 10),parseInt(end+60, 10));
        //this.answer=this.text.substring(parseInt(start, 10),parseInt(end, 10));
-      console.log(start, end,this.text.substring(parseInt(start, 10),parseInt(end, 10))); // eslint-disable-line no-console
-      console.log(start-40, end+40,this.text.substring(parseInt(start-40, 10),parseInt(end+40, 10))); // eslint-disable-line no-console
-
+      // console.log(start, end,this.text.substring(parseInt(start, 10),parseInt(end, 10))); // eslint-disable-line no-console
+      // console.log(start-40, end+40,this.text.substring(parseInt(start-40, 10),parseInt(end+40, 10))); // eslint-disable-line no-console
+      console.log(this.answer);
+      console.log(this.answer_forgen)
     },
 
     validRange() {

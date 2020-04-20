@@ -78,7 +78,7 @@ export default {
       formData.append('format', this.format);
 
       window.setTimeout( function(){  //acting like this is an Ajax call
-         alert('upload file '+this.i);
+         alert('upload file finish');
         
         HTTP.post('docs/upload_file',
           formData,
